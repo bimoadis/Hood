@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoodchi — Your ASCII companion, running on chain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: { fontFamily: {
+  display: ['Space Grotesk','system-ui','sans-serif'],
+  sans: ['Inter','system-ui','sans-serif'],
+  mono: ['JetBrains Mono','monospace'],
+}}}}
+</script>
+<style>
+  :root{
+    --bg:#FAFAF7; --surface:#FFFFFF; --surface-2:#F2F2EC;
+    --line: rgba(0,0,0,.10); --line-2: rgba(0,0,0,.18);
+    --fg:#0E100A; --fg-soft: rgba(14,16,10,.66); --fg-faint: rgba(14,16,10,.44);
+    --green:#CCFF00; --green-ink:#4C6B00; --green-tint: rgba(76,107,0,.08);
+  }
+  body{ background:var(--bg); color:var(--fg); font-family:'Inter',system-ui,sans-serif; }
+  .border-glow{ transition:border-color .3s ease, box-shadow .3s ease, transform .3s ease; }
+  .border-glow:hover{ border-color:rgba(76,107,0,.4); transform:translateY(-2px); box-shadow:0 14px 34px -16px rgba(76,107,0,.25); }
+  @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.25}}
+  .live-dot{ width:7px; height:7px; background:var(--green-ink); border-radius:50%; animation:pulse-dot 2s ease-in-out infinite; }
+  .ticker-wrap{ overflow:hidden; white-space:nowrap; }
+  .ticker{ display:inline-block; animation:tk 32s linear infinite; }
+  @keyframes tk{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .grain::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:radial-gradient(ellipse at 50% -10%, rgba(76,107,0,.06), transparent 55%);
+  }
+</style>
+</head>
+<body class="grain min-h-screen">
+
+  <div class="ticker-wrap border-b border-black/10 bg-black text-white/70 font-mono text-[11px]">
+    <div class="ticker py-1.5">
+      <span class="px-6">DESK <span class="text-[#CCFF00]">▲ ONLINE</span></span>
+      <span class="px-6">SPECIES <span class="text-[#CCFF00]">▲ 100+</span></span>
+      <span class="px-6">MINT <span class="text-[#CCFF00]">▲ $0.00 · FREE</span></span>
+      <span class="px-6">DESK <span class="text-[#CCFF00]">▲ ONLINE</span></span>
+      <span class="px-6">SPECIES <span class="text-[#CCFF00]">▲ 100+</span></span>
+      <span class="px-6">MINT <span class="text-[#CCFF00]">▲ $0.00 · FREE</span></span>
+    </div>
+  </div>
+
+  <header class="border-b border-black/10 bg-white/85 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 bg-black rounded-lg flex items-center justify-center font-display font-bold text-[#CCFF00] text-sm">H</div>
+        <span class="font-display font-bold text-xl tracking-tight">Hoodchi</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-black/50">
+        <a href="#" class="hover:text-black transition">Home</a>
+        <a href="hoodchi-docs-white.html" class="hover:text-black transition">Docs</a>
+        <a href="#" class="hover:text-black transition">𝕏</a>
+      </nav>
+      <a href="#" class="bg-[#CCFF00] hover:bg-[#DFFF3D] text-black font-semibold text-xs px-5 py-2.5 rounded-full transition-all">Hatch yours →</a>
+    </div>
+  </header>
+
+  <main class="relative z-10">
+    <!-- HERO -->
+    <section class="max-w-6xl mx-auto px-6 pt-20 pb-16 grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="font-mono text-xs uppercase tracking-widest text-black/40 flex items-center gap-2 mb-5">
+          <span class="live-dot"></span> Live on 𝕏 · systems normal
+        </span>
+        <h1 class="font-display font-bold text-5xl lg:text-6xl leading-[1.02] tracking-tight mb-5">
+          Your ASCII companion,<br><span class="text-[#4C6B00]">running on chain.</span>
+        </h1>
+        <p class="text-black/60 text-lg max-w-md mb-8">
+          Hoodchi is the bridge between pet and blockchain — hatch a companion on 𝕏 today, and soon it plugs into project:vex for capital-markets functions.
+        </p>
+        <div class="flex flex-wrap gap-4 mb-10">
+          <a href="#" class="bg-[#CCFF00] hover:bg-[#DFFF3D] hover:shadow-[0_0_24px_rgba(140,179,0,.35)] text-black font-semibold text-sm px-7 py-3 rounded-full transition-all">Hatch on 𝕏 →</a>
+          <a href="hoodchi-docs-white.html" class="border border-black/20 hover:border-[#4C6B00] hover:text-[#4C6B00] font-semibold text-sm px-7 py-3 rounded-full transition-all">Read the docs</a>
+        </div>
+        <div class="flex gap-8 font-mono text-xs text-black/50">
+          <div><span class="text-[#4C6B00] font-bold">11</span> sections</div>
+          <div><span class="text-[#4C6B00] font-bold">100+</span> species</div>
+          <div><span class="text-[#4C6B00] font-bold">$0.00</span> · free, always</div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-black/10 rounded-2xl p-6 border-glow shadow-sm">
+        <div class="font-mono text-[10px] uppercase tracking-widest text-black/40 mb-3 flex justify-between">
+          <span>Hatching card</span><span>#0417</span>
+        </div>
+        <div class="font-mono text-[13px] leading-tight text-center text-[#4C6B00] bg-[#F2F2EC] border border-black/10 rounded-lg py-6 mb-4">  /\_/\
+ ( o.o )
+  &gt; ^ &lt;</div>
+        <div class="font-display font-bold text-lg">Zephyr — Cosmic Orb</div>
+        <div class="font-mono text-xs text-black/40 mt-1">stage: hatchling · meals: 0</div>
+        <div class="mt-4 flex gap-2">
+          <span class="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-3 py-1 text-[11px] font-mono rounded-full">astral</span>
+          <span class="border border-black/10 text-black/60 px-3 py-1 text-[11px] font-mono rounded-full">rare</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAPABILITIES -->
+    <section class="max-w-6xl mx-auto px-6 py-16 border-t border-black/10">
+      <div class="mb-10">
+        <span class="font-mono text-xs uppercase tracking-widest text-black/40">001 · The desk</span>
+        <h2 class="font-display font-bold text-3xl mt-2 max-w-xl">A living ASCII creature, raised in public on 𝕏.</h2>
+        <p class="text-black/60 max-w-2xl mt-3">Tag the desk in any post and the agent takes over — reads your words, crafts a visual card, and orchestrates encounters between your companion and others. No downloads, no accounts, no friction.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="bg-white border border-black/10 rounded-xl p-5 border-glow">
+          <div class="font-mono text-[#4C6B00] text-lg mb-2">◆</div>
+          <div class="font-display font-bold mb-1">One exclusive companion</div>
+          <p class="text-black/60 text-sm">Each 𝕏 account gets exactly one Hoodchi. Keeps every bond personal.</p>
+        </div>
+        <div class="bg-white border border-black/10 rounded-xl p-5 border-glow">
+          <div class="font-mono text-[#4C6B00] text-lg mb-2">▲</div>
+          <div class="font-display font-bold mb-1">Talk however you talk</div>
+          <p class="text-black/60 text-sm">No rigid syntax. The AI reads intent from ordinary language.</p>
+        </div>
+        <div class="bg-white border border-black/10 rounded-xl p-5 border-glow">
+          <div class="font-mono text-[#4C6B00] text-lg mb-2">✦</div>
+          <div class="font-display font-bold mb-1">Feed it anything</div>
+          <p class="text-black/60 text-sm">Antimatter smoothies included. The AI rolls with whatever you offer.</p>
+        </div>
+        <div class="bg-white border border-black/10 rounded-xl p-5 border-glow">
+          <div class="font-mono text-[#4C6B00] text-lg mb-2">↻</div>
+          <div class="font-display font-bold mb-1">Autonomous encounters</div>
+          <p class="text-black/60 text-sm">Companions meet and interact with each other on their own.</p>
+        </div>
+        <div class="bg-white border border-black/10 rounded-xl p-5 border-glow">
+          <div class="font-mono text-[#4C6B00] text-lg mb-2">▣</div>
+          <div class="font-display font-bold mb-1">A card, every time</div>
+          <p class="text-black/60 text-sm">Every reply ships with a hand-rendered, screenshot-worthy card.</p>
+        </div>
+        <div class="bg-white border border-black/10 rounded-xl p-5 border-glow">
+          <div class="font-mono text-[#4C6B00] text-lg mb-2">$</div>
+          <div class="font-display font-bold mb-1">Completely free</div>
+          <p class="text-black/60 text-sm">No hidden tiers, no premium, no sign-up walls.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE LOG -->
+    <section class="max-w-6xl mx-auto px-6 py-16 border-t border-black/10">
+      <span class="font-mono text-xs uppercase tracking-widest text-black/40">002 · From the timeline</span>
+      <h2 class="font-display font-bold text-3xl mt-2 mb-6 max-w-xl">What a reply actually looks like.</h2>
+      <div class="bg-black border border-black/10 rounded-xl overflow-hidden max-w-2xl">
+        <div class="flex items-center gap-2 px-4 py-3 bg-[#111310] border-b border-white/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-red-500/50"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-green-500/50"></span>
+          <span class="font-mono text-[10px] text-white/40 ml-2 uppercase tracking-widest">reply-thread.log</span>
+        </div>
+        <pre class="p-5 font-mono text-xs leading-relaxed overflow-x-auto"><span class="text-white/40">$</span> <span class="text-white">you: "serve my hoodchi gyoza"</span>
+<span class="text-[#CCFF00]">▲ desk: carefully dipping each one, savoring every bite!</span>
+<span class="text-white/50">↳ hunger reset · meal count +1 · card attached</span></pre>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="max-w-6xl mx-auto px-6 py-20 border-t border-black/10 text-center">
+      <h2 class="font-display font-bold text-4xl mb-4">Hatch something alive.</h2>
+      <p class="text-black/60 max-w-md mx-auto mb-8">One mention on 𝕏 and a tiny position opens in your name. Free, forever.</p>
+      <a href="#" class="bg-[#CCFF00] hover:bg-[#DFFF3D] text-black font-semibold text-sm px-8 py-3.5 rounded-full transition-all inline-block">Hatch on 𝕏 →</a>
+    </section>
+  </main>
+
+  <footer class="border-t border-black/10">
+    <div class="max-w-6xl mx-auto px-6 py-10 font-mono text-[11px] text-black/40 flex flex-wrap justify-between gap-4">
+      <div>© 2026 Hoodchi · a trading terminal for tiny lives</div>
+      <div>Systems <span class="text-[#4C6B00]">▲ Normal</span></div>
+    </div>
+  </footer>
+
+</body>
+</html>
