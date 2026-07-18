@@ -9,15 +9,11 @@ export declare class WebhookController {
     handleCRC(crcToken: string): {
         response_token: string;
     };
-    handleIncomingEvents(req: {
-        body: {
-            tweet_create_events?: unknown[];
-        };
-    }, signature: string): Promise<{
+    handleIncomingEvents(req: any, signature: string): Promise<{
         status: string;
         count?: undefined;
     } | {
         status: string;
-        count: number;
+        count: any;
     }>;
 }
