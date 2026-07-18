@@ -60,7 +60,7 @@ export default function GalleryPage() {
                 className="bg-white border border-black/10 rounded-lg p-6 shadow-sm hover:shadow transition flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative w-full aspect-square bg-[#F9F9F6] rounded-md border border-black/5 flex items-center justify-center overflow-hidden mb-4">
+                  <div className="relative w-full aspect-square bg-transparent flex items-center justify-center overflow-hidden mb-4">
                     {/* Render Character Image */}
                     <img
                       src={`/uploads/${petImageName}.png`}

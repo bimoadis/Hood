@@ -23,7 +23,7 @@ export default function PixelPetRenderer({
   const customSrc = customImgName ? `/uploads/${customImgName}.png` : '';
 
   return (
-    <div className={`relative bg-[#F2F2EC] rounded-xl border border-black/10 flex items-center justify-center overflow-hidden ${className}`}>
+    <div className={`relative flex items-center justify-center overflow-hidden ${className}`}>
       {customSrc ? (
         <img
           src={customSrc}

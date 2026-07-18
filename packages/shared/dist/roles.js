@@ -4,7 +4,7 @@ exports.CHARACTER_ROLES = void 0;
 exports.CHARACTER_ROLES = {
     'Robin Fox': {
         characterName: 'Robin Fox',
-        role: 'Ranger ',
+        role: 'Ranger',
         group: 'Forest Rangers',
         description: 'Group leader. Expert in archery, strategizing, and leading ambush or rescue missions. Intelligent and quick to make decisions.'
     },

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import PixelPetRenderer from "@/components/PixelPetRenderer";
+import CompanionCard from "@/components/CompanionCard";
 
 export default function Home() {
   return (
@@ -110,74 +111,56 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {/* Card 1 */}
-          <div className="bg-white border border-black/10 rounded-xl p-5 border-glow flex flex-col gap-3">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between">
-              <span>Hatching card</span><span>#0417</span>
-            </div>
-            
-            <PixelPetRenderer species="fox" evolutionLvl={1} className="w-full h-32" />
+          <CompanionCard
+            cardType="Hatching card"
+            cardNumber="#0417"
+            companionName="Robin Fox"
+            species="fox"
+            evolutionLvl={1}
+            title="Zephyr — Cosmic Orb"
+            description="A new companion opens its eyes for the first time. Species assigned at random from the book."
+            bottomLeft="001 hatch"
+            bottomRight="stage: hatchling"
+          />
 
-            <h3 className="font-display font-bold text-lg text-black mt-2">Zephyr — Cosmic Orb</h3>
-            <p className="text-black/60 text-sm leading-relaxed">
-              A new companion opens its eyes for the first time. Species assigned at random from the book.
-            </p>
-            <div className="flex justify-between items-center font-mono text-xs text-black/40 pt-2 border-t border-dashed border-black/10 mt-auto">
-              <span>001 hatch</span><span>stage: hatchling</span>
-            </div>
-          </div>
+          <CompanionCard
+            cardType="Meal card"
+            cardNumber="#0418"
+            companionName="Hartley"
+            species="deer"
+            evolutionLvl={2}
+            title='"served gyoza"'
+            description="Carefully dipping each one, savoring every bite! Hunger reset, meal count +1."
+            bottomLeft="meals: 7"
+            bottomRight="▲ satisfied"
+          />
 
-          {/* Card 2 */}
-          <div className="bg-white border border-black/10 rounded-xl p-5 border-glow flex flex-col gap-3">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between">
-              <span>Meal card</span><span>#0418</span>
-            </div>
-            
-            <PixelPetRenderer species="deer" evolutionLvl={2} className="w-full h-32" />
+          <CompanionCard
+            cardType="Status card"
+            cardNumber="#0419"
+            companionName="Olliver"
+            species="owl"
+            evolutionLvl={1}
+            title="Current position"
+            description="Hunger, mood, evolution stage and current activity, at a glance."
+            statusMetadata={{
+              mood: "content",
+              stage: "juvenile"
+            }}
+          />
 
-            <h3 className="font-display font-bold text-lg text-black mt-2">&quot;served gyoza&quot;</h3>
-            <p className="text-black/60 text-sm leading-relaxed">
-              Carefully dipping each one, savoring every bite! Hunger reset, meal count +1.
-            </p>
-            <div className="flex justify-between items-center font-mono text-xs text-black/40 pt-2 border-t border-dashed border-black/10 mt-auto">
-              <span>meals: 7</span>
-              <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2.5 py-0.5 text-[10px] font-mono rounded-full uppercase tracking-wider">▲ satisfied</span>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className="bg-white border border-black/10 rounded-xl p-5 border-glow flex flex-col gap-3">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between">
-              <span>Status card</span><span>#0419</span>
-            </div>
-            
-            <PixelPetRenderer species="bear" evolutionLvl={1} className="w-full h-32" />
-
-            <h3 className="font-display font-bold text-lg text-black mt-2">Current position</h3>
-            <p className="text-black/60 text-sm leading-relaxed">
-              Hunger, mood, evolution stage and current activity, at a glance.
-            </p>
-            <div className="flex justify-between items-center font-mono text-xs text-black/40 pt-2 border-t border-dashed border-black/10 mt-auto">
-              <span>mood: content</span><span>stage: juvenile</span>
-            </div>
-          </div>
-
-          {/* Card 4 */}
-          <div className="bg-white border border-black/10 rounded-xl p-5 border-glow flex flex-col gap-3">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between">
-              <span>Adventure card</span><span>#0420</span>
-            </div>
-            
-            <PixelPetRenderer species="rabbit" evolutionLvl={3} weaponId="wood_bow" className="w-full h-32" />
-
-            <h3 className="font-display font-bold text-lg text-black mt-2">Zephyr & Luna</h3>
-            <p className="text-black/60 text-sm leading-relaxed">
-              Building sandcastles on a cloud. Both owners notified, encounter logged.
-            </p>
-            <div className="flex justify-between items-center font-mono text-xs text-black/40 pt-2 border-t border-dashed border-black/10 mt-auto">
-              <span>006 adventure</span><span>owners: 2</span>
-            </div>
-          </div>
+          <CompanionCard
+            cardType="Adventure card"
+            cardNumber="#0420"
+            companionName="Harelock"
+            species="rabbit"
+            evolutionLvl={3}
+            weaponId="wood_bow"
+            title="Zephyr & Luna"
+            description="Building sandcastles on a cloud. Both owners notified, encounter logged."
+            bottomLeft="006 adventure"
+            bottomRight="owners: 2"
+          />
         </div>
       </section>
 

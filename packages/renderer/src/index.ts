@@ -6,6 +6,16 @@ import * as path from 'path';
 @Injectable()
 export class CardRendererService {
   async compileCard(name: string, species: string, evolution: number, weapon?: string): Promise<Buffer> {
+    const rootDir = process.cwd();
+    const uploadsDir = path.join(rootDir, 'apps/web/public/uploads');
+    const normalizedName = name.toLowerCase().replace(/ /g, '_').replace(/-/g, '_');
+    const customImgPath = path.join(uploadsDir, `${normalizedName}.png`);
+
+    // If the custom image exists, return it directly
+    if (fs.existsSync(customImgPath)) {
+      return fs.readFileSync(customImgPath);
+    }
+
     const canvas = createCanvas(1200, 675);
     const ctx = canvas.getContext('2d');
     
@@ -19,11 +29,7 @@ export class CardRendererService {
     ctx.strokeRect(20, 20, 1160, 635);
     
     // 2. Draw layered companion assets in the center
-    const uploadsDir = path.resolve(__dirname, '../../../apps/web/public/uploads');
-    const assetsDir = path.resolve(__dirname, '../../../apps/web/public/assets');
-    const normalizedName = name.toLowerCase().replace(' ', '_').replace('-', '_');
-    
-    const customImgPath = path.join(uploadsDir, `${normalizedName}.png`);
+    const assetsDir = path.join(rootDir, 'apps/web/public/assets');
     const bodyPath = path.join(assetsDir, `pets/${species}/base.png`);
     const outfitPath = path.join(assetsDir, `pets/${species}/outfit_stage_${evolution}.png`);
     const weaponPath = weapon ? path.join(assetsDir, `equipments/${weapon}.png`) : '';
@@ -31,14 +37,8 @@ export class CardRendererService {
     let drawnImage = false;
 
     try {
-      // Try to load custom full illustration first
-      if (fs.existsSync(customImgPath)) {
-        const customImg = await loadImage(customImgPath);
-        ctx.drawImage(customImg, 450, 150, 300, 300);
-        drawnImage = true;
-      } 
       // Otherwise fallback to layered composition
-      else if (fs.existsSync(bodyPath) && fs.existsSync(outfitPath)) {
+      if (fs.existsSync(bodyPath) && fs.existsSync(outfitPath)) {
         const body = await loadImage(bodyPath);
         const outfit = await loadImage(outfitPath);
         
