@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --surface-2: #F2F2EC;
+  --line: rgba(0,0,0,0.10);
+  --line-2: rgba(0,0,0,0.18);
+  --fg: #0E100A;
+  --fg-soft: rgba(14,16,10,0.66);
+  --fg-faint: rgba(14,16,10,0.44);
+  --green: #CCFF00;
+  --green-ink: #4C6B00;
+  --green-tint: rgba(76,107,0,0.08);
+  --green-glow: rgba(140,179,0,0.35);
+  --danger: #C23B12;
+  --warn: #8A6600;
+
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', system-ui, sans-serif;
+  --display: 'Space Grotesk', system-ui, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+.border-glow {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+.border-glow:hover {
+  border-color: rgba(76,107,0,0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -14px rgba(76,107,0,0.25);
+}
+
+/* ---------- top ticker ---------- */
+.ticker-wrap {
+  background: #000000;
+  color: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .03em;
+  border-bottom: 1px solid var(--line);
+}
+.ticker {
+  display: inline-block;
+  padding: 8px 0;
+  animation: scroll-left 32s linear infinite;
+}
+.ticker span { padding: 0 24px; }
+.tk-up { color: var(--green); }
+.tk-down { color: var(--danger); }
+
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--green-ink);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Background grain & ambient glow decoration */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% -10%, rgba(76, 107, 0, 0.05), transparent 55%);
+}
+
+
