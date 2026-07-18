@@ -6,7 +6,14 @@ dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, { bodyParser: false });
+    const bodyParser = require('body-parser');
+    app.use(bodyParser.json({
+        verify: (req, res, buf) => {
+            req.rawBody = buf;
+        },
+    }));
+    app.use(bodyParser.urlencoded({ extended: true }));
     app.enableCors();
     await app.listen(process.env.PORT || 3001);
     console.log(`NestJS API gateway running on port ${process.env.PORT || 3001}`);

@@ -33,7 +33,7 @@ let WebhookController = class WebhookController {
         console.log('Signature:', signature);
         console.log('Body:', JSON.stringify(req.body));
         const clientSecret = process.env.X_CONSUMER_SECRET || 'test_secret';
-        const rawBody = JSON.stringify(req.body);
+        const rawBody = req.rawBody ? req.rawBody.toString('utf8') : JSON.stringify(req.body);
         const isValid = this.webhookService.verifyXSignature(rawBody, signature, clientSecret);
         console.log('Signature verification result:', isValid);
         if (!isValid && process.env.NODE_ENV === 'production') {
@@ -67,7 +67,7 @@ __decorate([
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Headers)('x-twitter-signatures')),
+    __param(1, (0, common_1.Headers)('x-twitter-webhooks-signature')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
