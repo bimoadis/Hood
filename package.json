@@ -10,7 +10,7 @@
     "dev:web": "npm run dev -w apps/web",
     "dev:api": "npm run dev -w apps/api",
     "build:web": "npm run build -w apps/web",
-    "build:api": "npm run build -w apps/api",
+    "build:api": "npm run build -w packages/shared && npm run build -w packages/database && npm run build -w packages/renderer && npm run build -w apps/api",
     "lint": "npm run lint -w apps/web",
     "test": "npm run test -w apps/api"
   },

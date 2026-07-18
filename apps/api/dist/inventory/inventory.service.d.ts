@@ -12,20 +12,20 @@ export declare class InventoryService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        companionId: string;
         itemName: string;
         itemType: string;
         statModifier: number;
         equipped: boolean;
+        companionId: string;
     }>;
     equipItem(companionId: string, itemId: string): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        companionId: string;
         itemName: string;
         itemType: string;
         statModifier: number;
         equipped: boolean;
+        companionId: string;
     }>;
 }
