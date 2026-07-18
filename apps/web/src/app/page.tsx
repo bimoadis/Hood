@@ -47,7 +47,7 @@ export default function Home() {
           </div>
           
           {/* Stacking Pixel Art composite view */}
-          <PixelPetRenderer species="fox" evolutionLvl={1} weaponId="wood_bow" className="w-full h-48" />
+          <PixelPetRenderer companionName="Robin Fox" species="fox" evolutionLvl={1} weaponId="wood_bow" className="w-full h-48" />
 
           <div className="font-display font-bold text-lg text-black mt-2">Archer — Robin Fox</div>
           <div className="font-mono text-xs text-black/40 mt-1">stage: hatchling · meals: 0</div>
