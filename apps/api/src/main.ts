@@ -6,7 +6,18 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bodyParser: false });
+  
+  const bodyParser = require('body-parser');
+  app.use(
+    bodyParser.json({
+      verify: (req: any, res: any, buf: Buffer) => {
+        req.rawBody = buf;
+      },
+    }),
+  );
+  app.use(bodyParser.urlencoded({ extended: true }));
+
   // Enable CORS
   app.enableCors();
   await app.listen(process.env.PORT || 3001);

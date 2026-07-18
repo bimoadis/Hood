@@ -20,7 +20,7 @@ export class WebhookController {
   @Post()
   async handleIncomingEvents(
     @Req() req: any,
-    @Headers('x-twitter-signatures') signature: string
+    @Headers('x-twitter-webhooks-signature') signature: string
   ) {
     console.log('Incoming Webhook POST Request Received');
     console.log('Headers:', JSON.stringify(req.headers));
@@ -28,7 +28,7 @@ export class WebhookController {
     console.log('Body:', JSON.stringify(req.body));
 
     const clientSecret = process.env.X_CONSUMER_SECRET || 'test_secret';
-    const rawBody = JSON.stringify(req.body);
+    const rawBody = req.rawBody ? req.rawBody.toString('utf8') : JSON.stringify(req.body);
 
     const isValid = this.webhookService.verifyXSignature(rawBody, signature, clientSecret);
     console.log('Signature verification result:', isValid);
