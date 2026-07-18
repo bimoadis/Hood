@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hoodlings-cache-v1';
+const CACHE_NAME = 'hoodlings-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/gallery',
@@ -19,7 +19,19 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Active');
+  console.log('[Service Worker] Activating new cache');
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            console.log('[Service Worker] Clearing old cache:', cache);
+            return caches.delete(cache);
+          }
+        })
+      );
+    })
+  );
 });
 
 self.addEventListener('fetch', (event) => {
