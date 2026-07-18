@@ -5,7 +5,7 @@ import * as path from 'path';
 
 @Injectable()
 export class CardRendererService {
-  async compileCard(species: string, evolution: number, weapon?: string): Promise<Buffer> {
+  async compileCard(name: string, species: string, evolution: number, weapon?: string): Promise<Buffer> {
     const canvas = createCanvas(1200, 675);
     const ctx = canvas.getContext('2d');
     
@@ -19,7 +19,11 @@ export class CardRendererService {
     ctx.strokeRect(20, 20, 1160, 635);
     
     // 2. Draw layered companion assets in the center
+    const uploadsDir = path.resolve(__dirname, '../../../apps/web/public/uploads');
     const assetsDir = path.resolve(__dirname, '../../../apps/web/public/assets');
+    const normalizedName = name.toLowerCase().replace(' ', '_').replace('-', '_');
+    
+    const customImgPath = path.join(uploadsDir, `${normalizedName}.png`);
     const bodyPath = path.join(assetsDir, `pets/${species}/base.png`);
     const outfitPath = path.join(assetsDir, `pets/${species}/outfit_stage_${evolution}.png`);
     const weaponPath = weapon ? path.join(assetsDir, `equipments/${weapon}.png`) : '';
@@ -27,8 +31,14 @@ export class CardRendererService {
     let drawnImage = false;
 
     try {
-      // Check if files exist to draw them
-      if (fs.existsSync(bodyPath) && fs.existsSync(outfitPath)) {
+      // Try to load custom full illustration first
+      if (fs.existsSync(customImgPath)) {
+        const customImg = await loadImage(customImgPath);
+        ctx.drawImage(customImg, 450, 150, 300, 300);
+        drawnImage = true;
+      } 
+      // Otherwise fallback to layered composition
+      else if (fs.existsSync(bodyPath) && fs.existsSync(outfitPath)) {
         const body = await loadImage(bodyPath);
         const outfit = await loadImage(outfitPath);
         
@@ -42,7 +52,7 @@ export class CardRendererService {
         drawnImage = true;
       }
     } catch (err) {
-      console.warn('Failed to load layered sprites, falling back to text drawings:', err);
+      console.warn('Failed to load assets, falling back to text drawings:', err);
     }
 
     // Fallback vector outline if images are not present

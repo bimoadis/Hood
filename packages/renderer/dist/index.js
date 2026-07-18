@@ -49,7 +49,7 @@ let CardRendererService = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var CardRendererService = _classThis = class {
-        async compileCard(species, evolution, weapon) {
+        async compileCard(name, species, evolution, weapon) {
             const canvas = (0, canvas_1.createCanvas)(1200, 675);
             const ctx = canvas.getContext('2d');
             // 1. Draw card layout frame background
@@ -60,14 +60,23 @@ let CardRendererService = (() => {
             ctx.lineWidth = 15;
             ctx.strokeRect(20, 20, 1160, 635);
             // 2. Draw layered companion assets in the center
+            const uploadsDir = path.resolve(__dirname, '../../../apps/web/public/uploads');
             const assetsDir = path.resolve(__dirname, '../../../apps/web/public/assets');
+            const normalizedName = name.toLowerCase().replace(' ', '_').replace('-', '_');
+            const customImgPath = path.join(uploadsDir, `${normalizedName}.png`);
             const bodyPath = path.join(assetsDir, `pets/${species}/base.png`);
             const outfitPath = path.join(assetsDir, `pets/${species}/outfit_stage_${evolution}.png`);
             const weaponPath = weapon ? path.join(assetsDir, `equipments/${weapon}.png`) : '';
             let drawnImage = false;
             try {
-                // Check if files exist to draw them
-                if (fs.existsSync(bodyPath) && fs.existsSync(outfitPath)) {
+                // Try to load custom full illustration first
+                if (fs.existsSync(customImgPath)) {
+                    const customImg = await (0, canvas_1.loadImage)(customImgPath);
+                    ctx.drawImage(customImg, 450, 150, 300, 300);
+                    drawnImage = true;
+                }
+                // Otherwise fallback to layered composition
+                else if (fs.existsSync(bodyPath) && fs.existsSync(outfitPath)) {
                     const body = await (0, canvas_1.loadImage)(bodyPath);
                     const outfit = await (0, canvas_1.loadImage)(outfitPath);
                     ctx.drawImage(body, 450, 150, 300, 300);
@@ -80,7 +89,7 @@ let CardRendererService = (() => {
                 }
             }
             catch (err) {
-                console.warn('Failed to load layered sprites, falling back to text drawings:', err);
+                console.warn('Failed to load assets, falling back to text drawings:', err);
             }
             // Fallback vector outline if images are not present
             if (!drawnImage) {
