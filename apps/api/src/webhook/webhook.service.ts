@@ -11,6 +11,10 @@ export class WebhookService {
     const cleanSignature = signature.startsWith('sha256=') ? signature.substring(7) : signature;
     const hmac = crypto.createHmac('sha256', clientSecret).update(payload).digest('base64');
     
+    console.log('verifyXSignature payload length:', payload.length);
+    console.log('verifyXSignature computed HMAC:', hmac);
+    console.log('verifyXSignature clean signature:', cleanSignature);
+    
     const hmacBuffer = Buffer.from(hmac);
     const signatureBuffer = Buffer.from(cleanSignature);
     
