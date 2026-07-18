@@ -19,24 +19,36 @@ export class WebhookController {
 
   @Post()
   async handleIncomingEvents(
-    @Req() req: { body: { tweet_create_events?: unknown[] } },
+    @Req() req: any,
     @Headers('x-twitter-signatures') signature: string
   ) {
+    console.log('Incoming Webhook POST Request Received');
+    console.log('Headers:', JSON.stringify(req.headers));
+    console.log('Signature:', signature);
+    console.log('Body:', JSON.stringify(req.body));
+
     const clientSecret = process.env.X_CONSUMER_SECRET || 'test_secret';
     const rawBody = JSON.stringify(req.body);
 
     const isValid = this.webhookService.verifyXSignature(rawBody, signature, clientSecret);
+    console.log('Signature verification result:', isValid);
+
     if (!isValid && process.env.NODE_ENV === 'production') {
+      console.warn('Signature verification failed in production! Rejecting request.');
       throw new UnauthorizedException('Invalid payload signature');
     }
 
     const { tweet_create_events } = req.body;
     if (!tweet_create_events) {
+      console.log('No tweet_create_events found in body. Ignoring.');
       return { status: 'ignored' };
     }
 
+    console.log(`Processing ${tweet_create_events.length} incoming events.`);
+
     for (const event of tweet_create_events) {
       const companionId = (event as any).user?.id_str || 'test_companion';
+      console.log(`Adding event to queue for companion: ${companionId}`);
       // Acquire Lock, Add event to BullMQ, and release Lock
       await this.lockService.acquireLock(companionId);
       await this.queueService.addEvent(event);
