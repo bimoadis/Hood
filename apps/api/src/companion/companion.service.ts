@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'database';
+import { CHARACTER_ROLES } from 'shared';
 
 @Injectable()
 export class CompanionService {
@@ -29,17 +30,36 @@ export class CompanionService {
       return existing;
     }
 
-    // 3. Random species and personality
-    const speciesList = ['Fox', 'Owl', 'Deer', 'Wolf', 'Badger'];
+    // 3. Randomly choose one character role from CHARACTER_ROLES
+    const characterNames = Object.keys(CHARACTER_ROLES);
+    const chosenCharacterName = characterNames[Math.floor(Math.random() * characterNames.length)];
+    const characterInfo = CHARACTER_ROLES[chosenCharacterName];
+
+    // Map character/role to species
+    const speciesMap: Record<string, string> = {
+      'Robin Fox': 'Fox',
+      'Hartley': 'Deer',
+      'Little John': 'Bear',
+      'Harelock': 'Hare',
+      'Nutley': 'Squirrel',
+      'Badgerick': 'Badger',
+      'Olliver': 'Owl',
+      'Willow': 'Fox',
+      'Prickle': 'Hedgehog',
+      'Rook': 'Rook',
+      'Merry': 'Mouse',
+      'Cawthorne': 'Crow'
+    };
+
+    const species = speciesMap[chosenCharacterName] || 'Fox';
     const personalities = ['Brave', 'Wise', 'Curious', 'Lazy'];
-    const species = speciesList[Math.floor(Math.random() * speciesList.length)];
     const personality = personalities[Math.floor(Math.random() * personalities.length)];
 
     // 4. Create companion
     const companion = await this.prisma.companion.create({
       data: {
         userId: user.id,
-        name: name || `${species} Outlaw`,
+        name: name || characterInfo.characterName,
         species,
         personality,
         level: 1,

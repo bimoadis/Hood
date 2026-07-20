@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CompanionService = void 0;
 const common_1 = require("@nestjs/common");
 const database_1 = require("database");
+const shared_1 = require("shared");
 let CompanionService = class CompanionService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -35,14 +36,30 @@ let CompanionService = class CompanionService {
             console.log(`[CompanionService] Companion already exists for user ${xScreenName}: ${existing.name}`);
             return existing;
         }
-        const speciesList = ['Fox', 'Owl', 'Deer', 'Wolf', 'Badger'];
+        const characterNames = Object.keys(shared_1.CHARACTER_ROLES);
+        const chosenCharacterName = characterNames[Math.floor(Math.random() * characterNames.length)];
+        const characterInfo = shared_1.CHARACTER_ROLES[chosenCharacterName];
+        const speciesMap = {
+            'Robin Fox': 'Fox',
+            'Hartley': 'Deer',
+            'Little John': 'Bear',
+            'Harelock': 'Hare',
+            'Nutley': 'Squirrel',
+            'Badgerick': 'Badger',
+            'Olliver': 'Owl',
+            'Willow': 'Fox',
+            'Prickle': 'Hedgehog',
+            'Rook': 'Rook',
+            'Merry': 'Mouse',
+            'Cawthorne': 'Crow'
+        };
+        const species = speciesMap[chosenCharacterName] || 'Fox';
         const personalities = ['Brave', 'Wise', 'Curious', 'Lazy'];
-        const species = speciesList[Math.floor(Math.random() * speciesList.length)];
         const personality = personalities[Math.floor(Math.random() * personalities.length)];
         const companion = await this.prisma.companion.create({
             data: {
                 userId: user.id,
-                name: name || `${species} Outlaw`,
+                name: name || characterInfo.characterName,
                 species,
                 personality,
                 level: 1,
