@@ -24,6 +24,9 @@ export class QueueService {
         const xUserId = user.id_str || 'mock_x_user_id';
         const xScreenName = user.screen_name || 'mock_user';
 
+        // Auto-hatch a companion for the user on their first interaction if they don't have one
+        await this.companionService.hatchCompanion(xUserId, xScreenName);
+
         let intent = 'CHAT';
         if (text.includes('feed') || text.includes('makan')) {
           intent = 'FEED';

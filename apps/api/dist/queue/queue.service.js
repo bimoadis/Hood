@@ -32,6 +32,7 @@ let QueueService = class QueueService {
                 const user = item.event.user || {};
                 const xUserId = user.id_str || 'mock_x_user_id';
                 const xScreenName = user.screen_name || 'mock_user';
+                await this.companionService.hatchCompanion(xUserId, xScreenName);
                 let intent = 'CHAT';
                 if (text.includes('feed') || text.includes('makan')) {
                     intent = 'FEED';
