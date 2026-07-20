@@ -14,6 +14,6 @@ export declare class WebhookController {
         count?: undefined;
     } | {
         status: string;
-        count: any;
+        count: number;
     }>;
 }

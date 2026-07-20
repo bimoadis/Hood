@@ -40,20 +40,37 @@ let WebhookController = class WebhookController {
             console.warn('Signature verification failed in production! Rejecting request.');
             throw new common_1.UnauthorizedException('Invalid payload signature');
         }
-        const { tweet_create_events } = req.body;
-        if (!tweet_create_events) {
-            console.log('No tweet_create_events found in body. Ignoring.');
+        let events = [];
+        if (req.body.tweet_create_events && Array.isArray(req.body.tweet_create_events)) {
+            events = req.body.tweet_create_events;
+        }
+        else if (req.body.data && req.body.data.payload) {
+            const data = req.body.data;
+            const payload = data.payload;
+            const author = data.includes?.users?.find((u) => u.id === payload.author_id) || {};
+            events.push({
+                id_str: payload.id,
+                text: payload.text,
+                user: {
+                    id_str: payload.author_id,
+                    screen_name: author.username || 'mock_user',
+                    name: author.name || 'mock_user_name',
+                }
+            });
+        }
+        if (events.length === 0) {
+            console.log('No supported events found in body. Ignoring.');
             return { status: 'ignored' };
         }
-        console.log(`Processing ${tweet_create_events.length} incoming events.`);
-        for (const event of tweet_create_events) {
+        console.log(`Processing ${events.length} incoming events.`);
+        for (const event of events) {
             const companionId = event.user?.id_str || 'test_companion';
             console.log(`Adding event to queue for companion: ${companionId}`);
             await this.lockService.acquireLock(companionId);
             await this.queueService.addEvent(event);
             await this.lockService.releaseLock(companionId);
         }
-        return { status: 'processed', count: tweet_create_events.length };
+        return { status: 'processed', count: events.length };
     }
 };
 exports.WebhookController = WebhookController;
