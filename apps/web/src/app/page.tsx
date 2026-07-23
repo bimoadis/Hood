@@ -69,9 +69,108 @@ const getApiBaseUrl = () => {
 
 const API_BASE_URL = getApiBaseUrl();
 
+const CHARACTER_ROLES: Record<string, { characterName: string; role: string; group: string; description: string }> = {
+  'Robin Fox': {
+    characterName: 'Robin Fox',
+    role: 'Ranger',
+    group: 'Forest Rangers',
+    description: 'Group leader. Expert in archery, strategizing, and leading ambush or rescue missions. Intelligent and quick to make decisions.'
+  },
+  'Hartley': {
+    characterName: 'Hartley',
+    role: 'Hunter',
+    group: 'Forest Rangers',
+    description: 'Master hunter and tracker. Proficient with long-range bows and skilled at identifying enemy and animal tracks in the forest.'
+  },
+  'Little John': {
+    characterName: 'Little John',
+    role: 'Guardian',
+    group: 'Forest Rangers',
+    description: 'Team protector with high physical strength. Stands on the front line to shield allies during combat.'
+  },
+  'Harelock': {
+    characterName: 'Harelock',
+    role: 'Scout',
+    group: 'Recon Corps',
+    description: 'The fastest scout. Responsible for exploring areas, opening maps, sending messages, and providing early warnings.'
+  },
+  'Nutley': {
+    characterName: 'Nutley',
+    role: 'Rogue',
+    group: 'Shadow Guild',
+    description: 'Expert in infiltration and resource gathering. Skilled at lockpicking, retrieving vital items, and moving silently.'
+  },
+  'Badgerick': {
+    characterName: 'Badgerick',
+    role: 'Quartermaster',
+    group: 'Logistics & Engineering Corps',
+    description: 'Manages supplies, builds camps, repairs equipment, and ensures the team\'s needs are always met.'
+  },
+  'Olliver': {
+    characterName: 'Olliver',
+    role: 'Sage',
+    group: 'Wisdom & Command Council',
+    description: 'Advisor and guardian of knowledge. Analyzes situations, reads nature\'s signs, and provides the best strategies.'
+  },
+  'Willow': {
+    characterName: 'Willow',
+    role: 'Elite Archer',
+    group: 'Forest Rangers',
+    description: 'Elite marksman capable of attacking from a distance with high accuracy. Suited for eliminating high-value targets.'
+  },
+  'Prickle': {
+    characterName: 'Prickle',
+    role: 'Inventor',
+    group: 'Logistics & Engineering Corps',
+    description: 'Elite trap designer. Expert in creating traps, simple gadgets, and designing defensive or offensive tactics.'
+  },
+  'Rook': {
+    characterName: 'Rook',
+    role: 'Smuggler',
+    group: 'Shadow Guild',
+    description: 'A spy who gathers information stealthily. Experienced in infiltration and smuggling.'
+  },
+  'Merry': {
+    characterName: 'Merry',
+    role: 'Strategist',
+    group: 'Wisdom & Command Council',
+    description: 'Expert in team formation and coordinating members during battle. Despite being small, their intellect is highly valuable.'
+  },
+  'Cawthorne': {
+    characterName: 'Cawthorne',
+    role: 'Courier',
+    group: 'Recon Corps',
+    description: 'Aerial messenger and intelligence gatherer. Watches the area from above and reports enemy movements.'
+  }
+};
+
+const getCompanionRoleInfo = (companion: { name: string; species: string; role?: string; group?: string; description?: string } | null | undefined) => {
+  if (!companion) return { role: "Ranger", group: "Forest Rangers", description: "A loyal companion." };
+  const key = Object.keys(CHARACTER_ROLES).find(k => CHARACTER_ROLES[k].characterName === companion.name) ||
+    Object.keys(CHARACTER_ROLES).find(k => CHARACTER_ROLES[k].role === companion.role) ||
+    Object.keys(CHARACTER_ROLES).find(k => {
+      const speciesMap: Record<string, string> = {
+        'Robin Fox': 'Fox',
+        'Hartley': 'Deer',
+        'Little John': 'Bear',
+        'Harelock': 'Hare',
+        'Nutley': 'Squirrel',
+        'Badgerick': 'Badger',
+        'Olliver': 'Owl',
+        'Willow': 'Fox',
+        'Prickle': 'Hedgehog',
+        'Rook': 'Rook',
+        'Merry': 'Mouse',
+        'Cawthorne': 'Crow'
+      };
+      return speciesMap[k]?.toLowerCase() === companion.species?.toLowerCase();
+    });
+  return key ? CHARACTER_ROLES[key] : { role: companion.role || "Ranger", group: companion.group || "Forest Rangers", description: companion.description || "A loyal companion." };
+};
+
 export default function Home() {
   const [email, setEmail] = useState("mock_user@x.com");
-  const [tempEmail, setTempEmail] = useState("mock_user@x.com");
+  const [tempEmail, setTempEmail] = useState("@mock_user");
   const [userCompanion, setUserCompanion] = useState<UserCompanion | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -140,8 +239,15 @@ export default function Home() {
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (tempEmail.trim()) {
-      setEmail(tempEmail);
+    let formattedEmail = tempEmail.trim();
+    if (formattedEmail.startsWith("@")) {
+      formattedEmail = formattedEmail.slice(1);
+    }
+    if (!formattedEmail.includes("@")) {
+      formattedEmail = `${formattedEmail}@x.com`;
+    }
+    if (formattedEmail) {
+      setEmail(formattedEmail);
     }
   };
 
@@ -227,8 +333,8 @@ export default function Home() {
             <h3 className="font-display font-bold text-sm text-black mb-3">Lookup User Dashboard</h3>
             <form onSubmit={handleEmailSubmit} className="flex gap-2">
               <input
-                type="email"
-                placeholder="user@x.com"
+                type="text"
+                placeholder="@username or email"
                 value={tempEmail}
                 onChange={(e) => setTempEmail(e.target.value)}
                 className="flex-1 px-3 py-1.5 border border-black/10 rounded-lg text-sm bg-transparent focus:outline-none focus:border-[#4C6B00] text-black"
@@ -250,9 +356,14 @@ export default function Home() {
               {loading && <span className="text-[9px] animate-pulse text-black/40">fetching...</span>}
               {error && <span className="text-[9px] text-red-500">offline</span>}
             </div>
-            <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
-              {email}
-            </span>
+            <a
+              href={`https://x.com/${email.split("@")[0]}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#4C6B00]/10 text-[#4C6B00] hover:bg-[#4C6B00]/20 px-2 py-0.5 rounded text-[9px] font-bold tracking-normal transition-all duration-200"
+            >
+              @{email.split("@")[0]}
+            </a>
           </div>
 
           {activeCompanion ? (
@@ -277,15 +388,23 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="bg-[#4C6B00]/10 text-[#4C6B00] border border-[#4C6B00]/20 px-2 py-0.5 text-[9px] font-bold rounded uppercase tracking-wider">
-                    {activeCompanion.role}
+                    {activeCompanion.role || getCompanionRoleInfo(activeCompanion).role}
                   </span>
                   <span className="text-[10px] text-black/40 font-mono">
-                    {activeCompanion.group}
+                    {activeCompanion.group || getCompanionRoleInfo(activeCompanion).group}
                   </span>
                 </div>
-                <p className="font-mono text-[10px] text-black/40 mb-3">
-                  Evolution Stage {activeCompanion.evolutionLvl} · EXP: {activeCompanion.xp}
-                </p>
+                <div className="flex flex-col mb-3">
+                  <div className="flex justify-between font-mono text-[10px] text-black/40">
+                    <span>EXP : {activeCompanion.xp}</span>
+                    <span>100</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
+                      <div className="bg-indigo-500 h-full transition-all duration-300" style={{ width: `${Math.min(100, activeCompanion.xp)}%` }}></div>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Vitals */}
                 <div className="grid grid-cols-2 gap-3 text-xs font-mono text-black/70">
@@ -350,7 +469,7 @@ export default function Home() {
                 </div>
 
                 <div className="mt-3 pt-3 border-t border-black/5 text-xs text-black/60 font-mono italic leading-relaxed">
-                  {activeCompanion.description}
+                  {activeCompanion.description || getCompanionRoleInfo(activeCompanion).description}
                 </div>
               </div>
             </>
@@ -427,9 +546,14 @@ export default function Home() {
                 {/* User email in the top right corner of the card */}
                 <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
                   <span>{card.cardNumber}</span>
-                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal truncate max-w-[120px]">
-                    {card.userEmail}
-                  </span>
+                  <a
+                    href={`https://x.com/${card.userEmail.split("@")[0]}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#4C6B00]/10 text-[#4C6B00] hover:bg-[#4C6B00]/20 px-2 py-0.5 rounded text-[9px] font-bold tracking-normal truncate max-w-[120px] transition-all duration-200"
+                  >
+                    @{card.userEmail.split("@")[0]}
+                  </a>
                 </div>
 
                 {/* Stacking Pixel Art composite view */}
@@ -453,54 +577,25 @@ export default function Home() {
                   <div className="flex flex-col gap-0.5 mb-2 font-mono text-[9px] text-black/50">
                     <div className="flex items-center gap-1.5">
                       <span className="bg-[#4C6B00]/10 text-[#4C6B00] border border-[#4C6B00]/20 px-1 py-0.2 rounded font-bold uppercase text-[8px]">
-                        {card.role}
+                        {card.role || getCompanionRoleInfo(card).role}
                       </span>
-                      <span className="truncate max-w-[130px]">{card.group}</span>
+                      <span className="truncate max-w-[130px]">{card.group || getCompanionRoleInfo(card).group}</span>
                     </div>
                   </div>
-                  <p className="font-mono text-[9px] text-black/40 mb-3">
-                    Stage {card.evolutionLvl} · EXP: {card.xp}
-                  </p>
 
-                  {/* Vitals */}
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">❤️ HP</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden">
-                          <div className="bg-red-500 h-full" style={{ width: `${card.health}%` }}></div>
-                        </div>
-                        <span className="text-[9px]">{card.health}</span>
-                      </div>
+                  {/* Dynamic description directly under the name/role */}
+                  <div className="mb-3 text-[9px] text-black/60 font-mono italic leading-relaxed">
+                    {card.description || getCompanionRoleInfo(card).description}
+                  </div>
+
+                  <div className="flex flex-col mb-3">
+                    <div className="flex justify-between font-mono text-[9px] text-black/40">
+                      <span>EXP : {card.xp}</span>
+                      <span>100</span>
                     </div>
-
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden">
-                          <div className="bg-yellow-500 h-full" style={{ width: `${card.energy}%` }}></div>
-                        </div>
-                        <span className="text-[9px]">{card.energy}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden">
-                          <div className="bg-orange-500 h-full" style={{ width: `${card.hunger}%` }}></div>
-                        </div>
-                        <span className="text-[9px]">{card.hunger}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">😊 Hpy</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden">
-                          <div className="bg-green-500 h-full" style={{ width: `${card.happiness}%` }}></div>
-                        </div>
-                        <span className="text-[9px]">{card.happiness}</span>
+                    <div className="flex items-center gap-1 mt-1">
+                      <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden">
+                        <div className="bg-indigo-500 h-full transition-all duration-300" style={{ width: `${Math.min(100, card.xp)}%` }}></div>
                       </div>
                     </div>
                   </div>
@@ -522,10 +617,6 @@ export default function Home() {
                       <span className="text-black/40 text-[9px]">Luck</span>
                       <span className="font-bold">{card.luck || 10}</span>
                     </div>
-                  </div>
-
-                  <div className="mt-2.5 pt-2 border-t border-black/5 text-[9px] text-black/50 font-mono italic leading-relaxed">
-                    {card.description}
                   </div>
                 </div>
               </div>

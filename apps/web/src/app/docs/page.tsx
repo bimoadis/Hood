@@ -2,6 +2,81 @@
 
 import { useEffect, useState } from "react";
 
+const CHARACTER_ROLES: Record<string, { characterName: string; role: string; group: string; description: string }> = {
+  'Robin Fox': {
+    characterName: 'Robin Fox',
+    role: 'Ranger',
+    group: 'Forest Rangers',
+    description: 'Group leader. Expert in archery, strategizing, and leading ambush or rescue missions. Intelligent and quick to make decisions.'
+  },
+  'Hartley': {
+    characterName: 'Hartley',
+    role: 'Hunter',
+    group: 'Forest Rangers',
+    description: 'Master hunter and tracker. Proficient with long-range bows and skilled at identifying enemy and animal tracks in the forest.'
+  },
+  'Little John': {
+    characterName: 'Little John',
+    role: 'Guardian',
+    group: 'Forest Rangers',
+    description: 'Team protector with high physical strength. Stands on the front line to shield allies during combat.'
+  },
+  'Harelock': {
+    characterName: 'Harelock',
+    role: 'Scout',
+    group: 'Recon Corps',
+    description: 'The fastest scout. Responsible for exploring areas, opening maps, sending messages, and providing early warnings.'
+  },
+  'Nutley': {
+    characterName: 'Nutley',
+    role: 'Rogue',
+    group: 'Shadow Guild',
+    description: 'Expert in infiltration and resource gathering. Skilled at lockpicking, retrieving vital items, and moving silently.'
+  },
+  'Badgerick': {
+    characterName: 'Badgerick',
+    role: 'Quartermaster',
+    group: 'Logistics & Engineering Corps',
+    description: 'Manages supplies, builds camps, repairs equipment, and ensures the team\'s needs are always met.'
+  },
+  'Olliver': {
+    characterName: 'Olliver',
+    role: 'Sage',
+    group: 'Wisdom & Command Council',
+    description: 'Advisor and guardian of knowledge. Analyzes situations, reads nature\'s signs, and provides the best strategies.'
+  },
+  'Willow': {
+    characterName: 'Willow',
+    role: 'Elite Archer',
+    group: 'Forest Rangers',
+    description: 'Elite marksman capable of attacking from a distance with high accuracy. Suited for eliminating high-value targets.'
+  },
+  'Prickle': {
+    characterName: 'Prickle',
+    role: 'Inventor',
+    group: 'Logistics & Engineering Corps',
+    description: 'Elite trap designer. Expert in creating traps, simple gadgets, and designing defensive or offensive tactics.'
+  },
+  'Rook': {
+    characterName: 'Rook',
+    role: 'Smuggler',
+    group: 'Shadow Guild',
+    description: 'A spy who gathers information stealthily. Experienced in infiltration and smuggling.'
+  },
+  'Merry': {
+    characterName: 'Merry',
+    role: 'Strategist',
+    group: 'Wisdom & Command Council',
+    description: 'Expert in team formation and coordinating members during battle. Despite being small, their intellect is highly valuable.'
+  },
+  'Cawthorne': {
+    characterName: 'Cawthorne',
+    role: 'Courier',
+    group: 'Recon Corps',
+    description: 'Aerial messenger and intelligence gatherer. Watches the area from above and reports enemy movements.'
+  }
+};
+
 export default function Docs() {
   const [activeSection, setActiveSection] = useState("about");
 
@@ -28,7 +103,8 @@ export default function Docs() {
     { id: "commands", label: "004 Commands" },
     { id: "feed", label: "005 Feeding" },
     { id: "adventure", label: "006 Adventures" },
-    { id: "evolution", label: "008 Evolution" },
+    { id: "evolution", label: "008 Level Up & Stats" },
+    { id: "characters", label: "009 Roster & Factions" },
     { id: "faq", label: "011 FAQ" },
   ];
 
@@ -60,11 +136,11 @@ export default function Docs() {
             Docs · Owner&apos;s manual · v1.0
           </span>
           <h1 className="font-display font-bold text-4xl lg:text-5xl mt-3 leading-tight text-black">
-            Your ASCII companion,<br />running on chain.
+            Your pixel companion,<br />running on chain.
           </h1>
           <div className="flex gap-6 mt-5 font-mono text-xs text-black/50">
             <span><span className="text-[#4C6B00] font-bold">▲</span> 11 sections</span>
-            <span><span className="text-[#4C6B00] font-bold">▲</span> 100+ species</span>
+            <span><span className="text-[#4C6B00] font-bold">▲</span> 12 classes</span>
             <span><span className="text-[#4C6B00] font-bold">▲</span> $0.00 · free, always</span>
           </div>
         </div>
@@ -74,7 +150,7 @@ export default function Docs() {
           <span className="font-mono text-xs text-black/40">001 / OVERVIEW</span>
           <h2 className="font-display font-bold text-2xl mt-2 mb-3 text-black">The desk.</h2>
           <p className="text-black/70 max-w-2xl mb-4">
-            <strong>Hoodlings</strong> is a platform for raising AI-driven digital companions directly through 𝕏 (Twitter) — a living ASCII creature that grows, develops personality, and forms bonds with other companions across the network, entirely through ordinary conversation.
+            <strong>Hoodlings</strong> is a platform for raising AI-driven digital companions directly through 𝕏 (Twitter) — a living Pixel Art creature that grows, develops personality, and forms bonds with other companions across the network, entirely through ordinary conversation.
           </p>
           <p className="text-black/70 max-w-2xl">
             Tag the desk in any post and the autonomous agent takes over: reads your words, crafts a visual response card, and orchestrates encounters between your companion and others. No downloads, no accounts, no friction.
@@ -92,7 +168,7 @@ export default function Docs() {
           <span className="font-mono text-xs text-black/40">002 / INTERFACE</span>
           <h2 className="font-display font-bold text-2xl mt-2 mb-3 text-black">What you&apos;ll see.</h2>
           <p className="text-black/70 max-w-2xl mb-4">
-            Everything happens on 𝕏, in the open. Write to the desk the way you&apos;d talk to a friend — within a minute or so, Hoodchi answers in your replies, with a card, in character.
+            Everything happens on 𝕏, in the open. Write to the desk the way you&apos;d talk to a friend — within a minute or so, your companion answers in your replies with a custom Pixel Art response card, in character.
           </p>
           <div className="border-l-2 border-[#4C6B00] bg-white p-5 rounded-r-xl max-w-xl">
             <span className="font-mono text-xs text-[#4C6B00] uppercase tracking-widest font-bold">▲ No friction</span>
@@ -114,7 +190,7 @@ export default function Docs() {
               <div className="font-mono text-xs text-black/60 bg-[#F2F2EC] rounded-lg p-3 mb-2">
                 &quot;hatch my hoodling&quot; · &quot;create a companion&quot; · &quot;I need a pet&quot;
               </div>
-              <p className="text-black/60 text-sm">The system assigns an ASCII creature with an AI-crafted name and species.</p>
+              <p className="text-black/60 text-sm">The system assigns a unique Pixel Art creature with an AI-crafted name, species, and RPG role.</p>
             </div>
             <div className="bg-white border border-black/10 rounded-xl p-5 border-glow">
               <div className="font-mono text-xs text-black/40 mb-2">02</div>
@@ -126,11 +202,11 @@ export default function Docs() {
             </div>
             <div className="bg-white border border-black/10 rounded-xl p-5 border-glow">
               <div className="font-mono text-xs text-black/40 mb-2">03</div>
-              <div className="font-display font-bold mb-2 text-black">Check the position</div>
+              <div className="font-display font-bold mb-2 text-black">Check Status</div>
               <div className="font-mono text-xs text-black/60 bg-[#F2F2EC] rounded-lg p-3 mb-2">
                 &quot;how is my companion?&quot; · &quot;show stats&quot;
               </div>
-              <p className="text-black/60 text-sm">View hunger, mood, evolution stage, personality and current activity.</p>
+              <p className="text-black/60 text-sm">View health, energy, hunger, happiness, level, EXP, and current stats.</p>
             </div>
             <div className="bg-white border border-black/10 rounded-xl p-5 border-glow">
               <div className="font-mono text-xs text-black/40 mb-2">04</div>
@@ -161,7 +237,7 @@ export default function Docs() {
               <tbody className="text-black/70">
                 <tr className="border-b border-black/10">
                   <td className="py-3 pr-4 font-semibold text-black">summon</td>
-                  <td className="py-3 pr-4">&quot;hatch my hoodchi&quot;</td>
+                  <td className="py-3 pr-4">&quot;hatch my hoodling&quot;</td>
                   <td className="py-3 pr-4">1 per account</td>
                   <td className="py-3">Welcome card</td>
                 </tr>
@@ -203,7 +279,7 @@ export default function Docs() {
             <pre className="p-5 font-mono text-xs leading-relaxed overflow-x-auto text-[#CCFF00]">
               <span className="text-white/40">$</span> <span className="text-white">&quot;serve her hot chocolate&quot;</span><br />
               <span className="text-[#CCFF00]">▲ wrapping tiny paws around the mug, purring softly!</span><br /><br />
-              <span className="text-white/40">$</span> <span className="text-white">&quot;give my hoodchi asteroid fragments&quot;</span><br />
+              <span className="text-white/40">$</span> <span className="text-white">&quot;give my hoodling asteroid fragments&quot;</span><br />
               <span className="text-[#CCFF00]">▲ crunching cosmic debris, sparkling from within!</span>
             </pre>
           </div>
@@ -237,29 +313,72 @@ export default function Docs() {
 
         {/* 008 */}
         <section id="evolution" className="py-10 border-t border-black/10 scroll-mt-[90px]">
-          <span className="font-mono text-xs text-black/40">008 / GROWTH</span>
-          <h2 className="font-display font-bold text-2xl mt-2 mb-3 text-black">Evolution.</h2>
+          <span className="font-mono text-xs text-black/40">008 / TRAINING & RPG</span>
+          <h2 className="font-display font-bold text-2xl mt-2 mb-3 text-black">Level Up & Stats.</h2>
           <p className="text-black/70 max-w-2xl mb-6">
-            Companions transform based on how consistently you feed them — think of it as compounding.
+            Every conversation and training session rewards your companion with EXP. Once their EXP bar fills up to 100, they level up and receive permanent RPG stat increases tailored to their specific class/role!
           </p>
-          <div className="flex flex-wrap items-center gap-0">
-            <div className="bg-white border border-black/10 rounded-xl px-5 py-4 min-w-[140px] text-black">
-              <div className="font-mono text-[10px] text-black/40 uppercase">Stage 1</div>
-              <div className="font-display font-bold mt-1">Hatchling</div>
-              <div className="font-mono text-xs text-black/50 mt-1">0–2 meals</div>
+          <div className="grid sm:grid-cols-3 gap-4 max-w-2xl text-black">
+            <div className="bg-white border border-black/10 rounded-xl p-4">
+              <div className="font-mono text-[10px] text-indigo-500 uppercase">⚔️ Strength</div>
+              <p className="text-black/60 text-xs mt-1">Boosts physical defense and combat power. Prime stat for Guardians.</p>
             </div>
-            <div className="px-3 text-black/30 font-mono">▶</div>
-            <div className="bg-[#4C6B00]/10 border border-[#4C6B00]/30 rounded-xl px-5 py-4 min-w-[140px] text-black">
-              <div className="font-mono text-[10px] text-[#4C6B00] uppercase">Stage 2</div>
-              <div className="font-display font-bold mt-1">Juvenile</div>
-              <div className="font-mono text-xs text-black/50 mt-1">3–5 meals</div>
+            <div className="bg-white border border-black/10 rounded-xl p-4">
+              <div className="font-mono text-[10px] text-indigo-500 uppercase">🧠 Intellect</div>
+              <p className="text-black/60 text-xs mt-1">Enhances tactical decision-making and wisdom. Prime stat for Sages & Strategists.</p>
             </div>
-            <div className="px-3 text-black/30 font-mono">▶</div>
-            <div className="bg-white border border-black/10 rounded-xl px-5 py-4 min-w-[140px] text-black">
-              <div className="font-mono text-[10px] text-black/40 uppercase">Stage 3</div>
-              <div className="font-display font-bold mt-1">Mature</div>
-              <div className="font-mono text-xs text-black/50 mt-1">6+ meals</div>
+            <div className="bg-white border border-black/10 rounded-xl p-4">
+              <div className="font-mono text-[10px] text-indigo-500 uppercase">🍀 Luck</div>
+              <p className="text-black/60 text-xs mt-1">Improves critical encounters and escape rates. Prime stat for Rogues & Smugglers.</p>
             </div>
+          </div>
+        </section>
+
+        {/* 009 */}
+        <section id="characters" className="py-10 border-t border-black/10 scroll-mt-[90px]">
+          <span className="font-mono text-xs text-black/40">009 / ROSTER</span>
+          <h2 className="font-display font-bold text-2xl mt-2 mb-3 text-black">Roster & Factions.</h2>
+          <p className="text-black/70 max-w-2xl mb-6">
+            Sherwood Forest is home to 12 unique legendary companions, divided into specialized tactical factions (groups). Each has their own custom role and vital duties.
+          </p>
+
+          <div className="grid sm:grid-cols-2 gap-4 max-w-4xl text-black">
+            {Object.entries(CHARACTER_ROLES).map(([key, info]) => {
+              const speciesMap: Record<string, string> = {
+                'Robin Fox': 'Fox',
+                'Hartley': 'Deer',
+                'Little John': 'Bear',
+                'Harelock': 'Hare',
+                'Nutley': 'Squirrel',
+                'Badgerick': 'Badger',
+                'Olliver': 'Owl',
+                'Willow': 'Fox',
+                'Prickle': 'Hedgehog',
+                'Rook': 'Rook',
+                'Merry': 'Mouse',
+                'Cawthorne': 'Crow'
+              };
+              const species = speciesMap[key] || "Companion";
+              return (
+                <div key={key} className="bg-white border border-black/10 rounded-xl p-5 border-glow">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="font-display font-bold text-base text-black">{info.characterName}</h4>
+                      <span className="text-[10px] text-black/40 font-mono">Species: {species}</span>
+                    </div>
+                    <span className="bg-[#4C6B00]/10 text-[#4C6B00] border border-[#4C6B00]/20 px-2 py-0.5 text-[9px] font-bold rounded uppercase tracking-wider">
+                      {info.role}
+                    </span>
+                  </div>
+                  <div className="text-[10px] text-indigo-600 font-mono mb-2 uppercase tracking-wide">
+                    {info.group}
+                  </div>
+                  <p className="text-black/60 text-xs leading-relaxed italic">
+                    &ldquo;{info.description}&rdquo;
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </section>
 
