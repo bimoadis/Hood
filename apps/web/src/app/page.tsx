@@ -1,12 +1,126 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import PixelPetRenderer from "@/components/PixelPetRenderer";
 import CompanionCard from "@/components/CompanionCard";
 
+interface Companion {
+  name: string;
+  species: string;
+  level: number;
+  evolutionLvl: number;
+  xp: number;
+  health: number;
+  energy: number;
+  hunger: number;
+  happiness: number;
+  friendship: number;
+  strength: number;
+  mood: string;
+}
+
+interface UserCompanion {
+  user: {
+    email: string;
+    name: string;
+  };
+  companion: Companion | null;
+}
+
 export default function Home() {
+  const [email, setEmail] = useState("mock_user@x.com");
+  const [tempEmail, setTempEmail] = useState("mock_user@x.com");
+  const [userCompanion, setUserCompanion] = useState<UserCompanion | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCompanionData = async (targetEmail: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`http://localhost:3001/api/companion/user/${targetEmail}`);
+      if (!response.ok) {
+        throw new Error("User or companion data not found on API");
+      }
+      const data = await response.json() as UserCompanion;
+      setUserCompanion(data);
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : "Failed to fetch";
+      console.warn("Failed to fetch from backend API. Using local mock fallback.", errMsg);
+      setError(errMsg);
+      // Fallback to static mock representation
+      setUserCompanion({
+        user: { email: targetEmail, name: targetEmail.split("@")[0] },
+        companion: {
+          name: "Robin Fox",
+          species: "Fox",
+          level: 1,
+          evolutionLvl: 1,
+          xp: 45,
+          health: 100,
+          energy: 90,
+          hunger: 15,
+          happiness: 65,
+          friendship: 12,
+          strength: 10,
+          mood: "Happy"
+        }
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCompanionData(email);
+  }, [email]);
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (tempEmail.trim()) {
+      setEmail(tempEmail);
+    }
+  };
+
+  const handleHatchMock = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/companion/hatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (response.ok) {
+        fetchCompanionData(email);
+      }
+    } catch {
+      alert("Hatch backend endpoint not reachable. Simulated hatching locally!");
+      setUserCompanion({
+        user: { email, name: email.split("@")[0] },
+        companion: {
+          name: "Hatched Robin",
+          species: "Fox",
+          level: 1,
+          evolutionLvl: 1,
+          xp: 0,
+          health: 100,
+          energy: 100,
+          hunger: 0,
+          happiness: 50,
+          friendship: 0,
+          strength: 10,
+          mood: "Happy"
+        }
+      });
+    }
+  };
+
+  const activeCompanion = userCompanion?.companion;
+
   return (
     <main className="relative z-10 font-sans min-h-screen">
       {/* HERO */}
-      <section className="max-w-6xl mx-auto px-6 pt-20 pb-16 grid md:grid-cols-2 gap-12 items-center">
+      <section className="max-w-6xl mx-auto px-6 pt-20 pb-16 grid md:grid-cols-2 gap-12 items-start">
         <div>
           <span className="font-mono text-xs uppercase tracking-widest text-black/40 flex items-center gap-2 mb-5">
             <span className="live-dot"></span> Live on 𝕏 · systems normal
@@ -34,28 +148,131 @@ export default function Home() {
               Read the docs
             </Link>
           </div>
-          <div className="flex gap-8 font-mono text-xs text-black/50">
-            <div><span className="text-[#4C6B00] font-bold">11</span> sections</div>
-            <div><span className="text-[#4C6B00] font-bold">100+</span> species</div>
-            <div><span className="text-[#4C6B00] font-bold">$0.00</span> · free, always</div>
+
+          {/* User selector input */}
+          <div className="bg-white border border-black/10 rounded-xl p-5 max-w-md border-glow">
+            <h3 className="font-display font-bold text-sm text-black mb-3">Lookup User Dashboard</h3>
+            <form onSubmit={handleEmailSubmit} className="flex gap-2">
+              <input
+                type="email"
+                placeholder="user@x.com"
+                value={tempEmail}
+                onChange={(e) => setTempEmail(e.target.value)}
+                className="flex-1 px-3 py-1.5 border border-black/10 rounded-lg text-sm bg-transparent focus:outline-none focus:border-[#4C6B00] text-black"
+              />
+              <button type="submit" className="bg-black hover:bg-neutral-800 text-white text-xs px-4 py-2 rounded-lg font-semibold transition">
+                Load
+              </button>
+            </form>
           </div>
         </div>
 
         {/* Dynamic Stacking Card representation */}
-        <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm max-w-md w-full justify-self-center md:justify-self-end flex flex-col gap-3">
-          <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between">
-            <span>Hatching card</span><span>#0417</span>
-          </div>
+        <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm max-w-md w-full justify-self-center md:justify-self-end flex flex-col gap-3 relative">
           
-          {/* Stacking Pixel Art composite view */}
-          <PixelPetRenderer companionName="Robin Fox" species="fox" evolutionLvl={1} weaponId="wood_bow" className="w-full h-48" />
-
-          <div className="font-display font-bold text-lg text-black mt-2">Archer — Robin Fox</div>
-          <div className="font-mono text-xs text-black/40 mt-1">stage: hatchling · meals: 0</div>
-          <div className="mt-4 flex gap-2">
-            <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-3 py-1 text-[11px] font-mono rounded-full uppercase tracking-wider">level 1</span>
-            <span className="border border-black/10 text-black/60 px-3 py-1 text-[11px] font-mono rounded-full uppercase tracking-wider">idle</span>
+          {/* User email in the top right corner of the card */}
+          <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <span>Hatching card</span>
+              {loading && <span className="text-[9px] animate-pulse text-black/40">fetching...</span>}
+              {error && <span className="text-[9px] text-red-500">offline</span>}
+            </div>
+            <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
+              {email}
+            </span>
           </div>
+
+          {activeCompanion ? (
+            <>
+              {/* Stacking Pixel Art composite view */}
+              <PixelPetRenderer
+                companionName={activeCompanion.name}
+                species={activeCompanion.species}
+                evolutionLvl={activeCompanion.evolutionLvl}
+                className="w-full h-48"
+              />
+
+              {/* Companion Stats Grid below the image */}
+              <div className="border-t border-black/5 pt-3 mt-1">
+                <div className="flex justify-between items-center mb-1">
+                  <h3 className="font-display font-bold text-lg text-black">
+                    {activeCompanion.name} <span className="text-xs text-black/50 font-normal">({activeCompanion.species})</span>
+                  </h3>
+                  <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2.5 py-0.5 text-[10px] font-mono rounded-full uppercase tracking-wider">
+                    Level {activeCompanion.level}
+                  </span>
+                </div>
+                <p className="font-mono text-[10px] text-black/40 mb-3">
+                  Evolution Stage {activeCompanion.evolutionLvl} · EXP: {activeCompanion.xp}
+                </p>
+
+                {/* Vitals */}
+                <div className="grid grid-cols-2 gap-3 text-xs font-mono text-black/70">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-black/40">❤️ Health</span>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
+                        <div className="bg-red-500 h-full" style={{ width: `${activeCompanion.health}%` }}></div>
+                      </div>
+                      <span className="text-[10px]">{activeCompanion.health}/100</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-black/40">⚡ Energy</span>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
+                        <div className="bg-yellow-500 h-full" style={{ width: `${activeCompanion.energy}%` }}></div>
+                      </div>
+                      <span className="text-[10px]">{activeCompanion.energy}/100</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-black/40">🍖 Hunger</span>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
+                        <div className="bg-orange-500 h-full" style={{ width: `${activeCompanion.hunger}%` }}></div>
+                      </div>
+                      <span className="text-[10px]">{activeCompanion.hunger}/100</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <span className="text-[10px] text-black/40">😊 Happiness</span>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
+                        <div className="bg-green-500 h-full" style={{ width: `${activeCompanion.happiness}%` }}></div>
+                      </div>
+                      <span className="text-[10px]">{activeCompanion.happiness}/100</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 text-xs font-mono text-black/70 mt-3 pt-3 border-t border-black/5">
+                  <div className="flex justify-between">
+                    <span className="text-black/40 text-[10px]">🤝 Friendship</span>
+                    <span className="font-bold">{activeCompanion.friendship}/100</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-black/40 text-[10px]">⚔️ Strength</span>
+                    <span className="font-bold">{activeCompanion.strength || 10}</span>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="py-12 text-center">
+              <span className="text-3xl">🥚</span>
+              <p className="text-sm font-semibold text-black/70 mt-3">No companion hatched yet for this user.</p>
+              <button
+                onClick={handleHatchMock}
+                className="mt-4 bg-[#CCFF00] hover:bg-[#DFFF3D] text-black font-semibold text-xs px-4 py-2 rounded-lg transition"
+              >
+                Hatch Mock Companion
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

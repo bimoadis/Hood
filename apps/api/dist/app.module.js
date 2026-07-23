@@ -18,12 +18,14 @@ const adventure_service_1 = require("./adventure/adventure.service");
 const r2_service_1 = require("./r2/r2.service");
 const inventory_service_1 = require("./inventory/inventory.service");
 const quest_service_1 = require("./quest/quest.service");
+const companion_controller_1 = require("./companion/companion.controller");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [database_1.PrismaModule, webhook_module_1.WebhookModule],
+        controllers: [companion_controller_1.CompanionController],
         providers: [
             auth_config_1.BetterAuthConfig,
             lock_service_1.LockService,
