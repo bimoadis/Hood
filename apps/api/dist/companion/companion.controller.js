@@ -21,6 +21,59 @@ let CompanionController = class CompanionController {
         this.prisma = prisma;
         this.companionService = companionService;
     }
+    async getLatestCompanions() {
+        const companions = await this.prisma.companion.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 4,
+            include: {
+                user: true,
+                memories: {
+                    orderBy: { createdAt: 'desc' },
+                    take: 1,
+                },
+            },
+        });
+        return companions.map((c, index) => {
+            const latestMemory = c.memories[0];
+            let cardType = "Status card";
+            let title = "Status Normal";
+            let description = `Companion ${c.name} is active in Sherwood.`;
+            if (latestMemory) {
+                if (latestMemory.memoryKey === 'last_adventure') {
+                    cardType = "Adventure card";
+                    title = "Adventure log";
+                    description = latestMemory.memoryValue;
+                }
+                else if (latestMemory.memoryKey === 'reply_history') {
+                    cardType = "Interaction card";
+                    title = "Command post";
+                    description = latestMemory.memoryValue;
+                }
+                else if (latestMemory.memoryKey === 'bot_response') {
+                    cardType = "Status card";
+                    title = "AI Response";
+                    description = latestMemory.memoryValue;
+                }
+            }
+            else {
+                cardType = "Hatching card";
+                title = "New Outlaw Alert";
+                description = `${c.name} the ${c.species} has joined the outlaws in Sherwood forest.`;
+            }
+            return {
+                id: c.id,
+                cardType,
+                cardNumber: `#0${417 + index}`,
+                companionName: c.name,
+                species: c.species,
+                evolutionLvl: c.evolutionLvl,
+                title,
+                description,
+                bottomLeft: `Level ${c.level}`,
+                bottomRight: c.mood,
+            };
+        });
+    }
     async getCompanionByUser(email) {
         const user = await this.prisma.user.findUnique({
             where: { email },
@@ -56,6 +109,12 @@ let CompanionController = class CompanionController {
     }
 };
 exports.CompanionController = CompanionController;
+__decorate([
+    (0, common_1.Get)('latest'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CompanionController.prototype, "getLatestCompanions", null);
 __decorate([
     (0, common_1.Get)('user/:email'),
     __param(0, (0, common_1.Param)('email')),

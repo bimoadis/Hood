@@ -28,12 +28,26 @@ interface UserCompanion {
   companion: Companion | null;
 }
 
+interface CardData {
+  id: string;
+  cardType: "Hatching card" | "Meal card" | "Status card" | "Adventure card";
+  cardNumber: string;
+  companionName: string;
+  species: string;
+  evolutionLvl: number;
+  title: string;
+  description: string;
+  bottomLeft: string;
+  bottomRight: string;
+}
+
 export default function Home() {
   const [email, setEmail] = useState("mock_user@x.com");
   const [tempEmail, setTempEmail] = useState("mock_user@x.com");
   const [userCompanion, setUserCompanion] = useState<UserCompanion | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [latestCards, setLatestCards] = useState<CardData[]>([]);
 
   const fetchCompanionData = async (targetEmail: string) => {
     setLoading(true);
@@ -76,6 +90,21 @@ export default function Home() {
     fetchCompanionData(email);
   }, [email]);
 
+  useEffect(() => {
+    const fetchLatestCards = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/companion/latest");
+        if (response.ok) {
+          const data = await response.json() as CardData[];
+          setLatestCards(data);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch latest cards from database. Using static fallbacks.", err);
+      }
+    };
+    fetchLatestCards();
+  }, []);
+
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (tempEmail.trim()) {
@@ -92,6 +121,12 @@ export default function Home() {
       });
       if (response.ok) {
         fetchCompanionData(email);
+        // Refresh latest cards section too
+        const latestResponse = await fetch("http://localhost:3001/api/companion/latest");
+        if (latestResponse.ok) {
+          const data = await latestResponse.json() as CardData[];
+          setLatestCards(data);
+        }
       }
     } catch {
       alert("Hatch backend endpoint not reachable. Simulated hatching locally!");
@@ -328,56 +363,75 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <CompanionCard
-            cardType="Hatching card"
-            cardNumber="#0417"
-            companionName="Robin Fox"
-            species="fox"
-            evolutionLvl={1}
-            title="Zephyr — Cosmic Orb"
-            description="A new companion opens its eyes for the first time. Species assigned at random from the book."
-            bottomLeft="001 hatch"
-            bottomRight="stage: hatchling"
-          />
+          {latestCards.length > 0 ? (
+            latestCards.map((card) => (
+              <CompanionCard
+                key={card.id}
+                cardType={card.cardType}
+                cardNumber={card.cardNumber}
+                companionName={card.companionName}
+                species={card.species}
+                evolutionLvl={card.evolutionLvl}
+                title={card.title}
+                description={card.description}
+                bottomLeft={card.bottomLeft}
+                bottomRight={card.bottomRight}
+              />
+            ))
+          ) : (
+            <>
+              <CompanionCard
+                cardType="Hatching card"
+                cardNumber="#0417"
+                companionName="Robin Fox"
+                species="fox"
+                evolutionLvl={1}
+                title="Zephyr — Cosmic Orb"
+                description="A new companion opens its eyes for the first time. Species assigned at random from the book."
+                bottomLeft="001 hatch"
+                bottomRight="stage: hatchling"
+              />
 
-          <CompanionCard
-            cardType="Meal card"
-            cardNumber="#0418"
-            companionName="Hartley"
-            species="deer"
-            evolutionLvl={2}
-            title='"served gyoza"'
-            description="Carefully dipping each one, savoring every bite! Hunger reset, meal count +1."
-            bottomLeft="meals: 7"
-            bottomRight="▲ satisfied"
-          />
+              <CompanionCard
+                cardType="Meal card"
+                cardNumber="#0418"
+                companionName="Hartley"
+                species="deer"
+                evolutionLvl={2}
+                title='"served gyoza"'
+                description="Carefully dipping each one, savoring every bite! Hunger reset, meal count +1."
+                bottomLeft="meals: 7"
+                bottomRight="▲ satisfied"
+              />
 
-          <CompanionCard
-            cardType="Status card"
-            cardNumber="#0419"
-            companionName="Olliver"
-            species="owl"
-            evolutionLvl={1}
-            title="Current position"
-            description="Hunger, mood, evolution stage and current activity, at a glance."
-            statusMetadata={{
-              mood: "content",
-              stage: "juvenile"
-            }}
-          />
+              <CompanionCard
+                cardType="Status card"
+                cardNumber="#0419"
+                companionName="Olliver"
+                species="owl"
+                evolutionLvl={1}
+                title="Current position"
+                description="Hunger, mood, evolution stage and current activity, at a glance."
+                statusMetadata={{
+                  mood: "content",
+                  stage: "juvenile"
+                }}
+              />
 
-          <CompanionCard
-            cardType="Adventure card"
-            cardNumber="#0420"
-            companionName="Harelock"
-            species="rabbit"
-            evolutionLvl={3}
-            weaponId="wood_bow"
-            title="Zephyr & Luna"
-            description="Building sandcastles on a cloud. Both owners notified, encounter logged."
-            bottomLeft="006 adventure"
-            bottomRight="owners: 2"
-          />
+              <CompanionCard
+                cardType="Adventure card"
+                cardNumber="#0420"
+                companionName="Harelock"
+                species="rabbit"
+                evolutionLvl={3}
+                weaponId="wood_bow"
+                title="Zephyr & Luna"
+                description="Building sandcastles on a cloud. Both owners notified, encounter logged."
+                bottomLeft="006 adventure"
+                bottomRight="owners: 2"
+              />
+            </>
+          )}
         </div>
       </section>
 
