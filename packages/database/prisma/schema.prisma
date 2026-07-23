@@ -41,6 +41,9 @@ model Companion {
   name         String
   species      String            // Fox, Owl, Deer, Wolf, etc.
   personality  String            // Brave, Wise, Curious, etc.
+  role         String            @default("Ranger")
+  group        String            @default("Forest Rangers")
+  description  String            @default("A loyal companion.")
   evolutionLvl Int               @default(1)
   level        Int               @default(1)
   xp           Int               @default(0)

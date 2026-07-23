@@ -112,6 +112,9 @@ describe('QueueService', () => {
         level: 2,
         evolutionLvl: 2,
         strength: expect.any(Number),
+        intelligence: expect.any(Number),
+        luck: expect.any(Number),
+        description: expect.any(String),
       }),
     }));
   });

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CompanionService } from '../companion/companion.service';
 import { PrismaService } from 'database';
+import { CHARACTER_ROLES } from 'shared';
 
 @Injectable()
 export class QueueService {
@@ -99,6 +100,8 @@ export class QueueService {
         }
 
         let strengthIncrement = 0;
+        let intelligenceIncrement = 0;
+        let luckIncrement = 0;
         let healthIncrement = 0;
         let energyIncrement = 0;
 
@@ -106,14 +109,34 @@ export class QueueService {
           const levelsGained = newLevel - companion.level;
           for (let i = 0; i < levelsGained; i++) {
             strengthIncrement += Math.floor(Math.random() * 10) + 1; // Random 1-10
+            intelligenceIncrement += Math.floor(Math.random() * 10) + 1; // Random 1-10
+            luckIncrement += Math.floor(Math.random() * 10) + 1; // Random 1-10
             healthIncrement += 5;
             energyIncrement += 5;
           }
-          console.log(`[QueueService] Level Up! ${companion.name} reached Level ${newLevel}. Strength +${strengthIncrement}, Health +${healthIncrement}, Energy +${energyIncrement}`);
+          console.log(`[QueueService] Level Up! ${companion.name} reached Level ${newLevel}. Strength +${strengthIncrement}, Intelligence +${intelligenceIncrement}, Luck +${luckIncrement}`);
         }
 
         newHealth = Math.min(100, newHealth + healthIncrement);
         let newEnergy = Math.min(100, Math.max(0, companion.energy - 10 + energyIncrement)); // Deduct 10 energy per interaction
+
+        // Dynamically compute companion's description adjusting to mood
+        const characterRoleKey = Object.keys(CHARACTER_ROLES).find(key => CHARACTER_ROLES[key].characterName === companion.name) ||
+                                 Object.keys(CHARACTER_ROLES).find(key => CHARACTER_ROLES[key].role === companion.role);
+        const baselineDesc = characterRoleKey ? CHARACTER_ROLES[characterRoleKey].description : "A loyal companion.";
+
+        let moodStatus = "";
+        if (newHealth === 0) {
+          moodStatus = " (Currently sick and needs rest)";
+        } else if (newHunger > 80) {
+          moodStatus = " (Starving and asking for food)";
+        } else if (newEnergy < 20) {
+          moodStatus = " (Very sleepy and exhausted)";
+        } else if (newHappiness > 80) {
+          moodStatus = " (Very cheerful and happy)";
+        }
+
+        const dynamicDescription = `${baselineDesc}${moodStatus}`;
 
         // Update companion record
         const updatedCompanion = await this.prisma.companion.update({
@@ -123,11 +146,14 @@ export class QueueService {
             level: newLevel,
             evolutionLvl: newLevel,
             strength: companion.strength + strengthIncrement,
+            intelligence: companion.intelligence + intelligenceIncrement,
+            luck: companion.luck + luckIncrement,
             health: newHealth,
             hunger: newHunger,
             happiness: newHappiness,
             friendship: newFriendship,
             energy: newEnergy,
+            description: dynamicDescription,
           },
         });
 

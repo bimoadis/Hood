@@ -16,6 +16,11 @@ interface Companion {
   happiness: number;
   friendship: number;
   strength: number;
+  intelligence: number;
+  luck: number;
+  role: string;
+  group: string;
+  description: string;
   mood: string;
 }
 
@@ -40,12 +45,29 @@ interface CardData {
   happiness: number;
   friendship: number;
   strength: number;
+  intelligence: number;
+  luck: number;
+  role: string;
+  group: string;
+  description: string;
   mood: string;
   cardNumber: string;
   userEmail: string;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const getApiBaseUrl = () => {
+  if (typeof window !== "undefined") {
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      return process.env.NEXT_PUBLIC_API_URL;
+    }
+    if (window.location.hostname === "localhost") {
+      return "http://localhost:3001";
+    }
+  }
+  return "";
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export default function Home() {
   const [email, setEmail] = useState("mock_user@x.com");
@@ -84,6 +106,11 @@ export default function Home() {
           happiness: 65,
           friendship: 12,
           strength: 10,
+          intelligence: 10,
+          luck: 10,
+          role: "Ranger",
+          group: "Forest Rangers",
+          description: "Group leader. Expert in archery, strategizing, and leading ambush or rescue missions.",
           mood: "Happy"
         }
       });
@@ -150,6 +177,11 @@ export default function Home() {
           happiness: 50,
           friendship: 0,
           strength: 10,
+          intelligence: 10,
+          luck: 10,
+          role: "Ranger",
+          group: "Forest Rangers",
+          description: "Group leader. Expert in archery, strategizing, and leading ambush or rescue missions.",
           mood: "Happy"
         }
       });
@@ -243,6 +275,14 @@ export default function Home() {
                     Level {activeCompanion.level}
                   </span>
                 </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] border border-[#4C6B00]/20 px-2 py-0.5 text-[9px] font-bold rounded uppercase tracking-wider">
+                    {activeCompanion.role}
+                  </span>
+                  <span className="text-[10px] text-black/40 font-mono">
+                    {activeCompanion.group}
+                  </span>
+                </div>
                 <p className="font-mono text-[10px] text-black/40 mb-3">
                   Evolution Stage {activeCompanion.evolutionLvl} · EXP: {activeCompanion.xp}
                 </p>
@@ -299,6 +339,18 @@ export default function Home() {
                     <span className="text-black/40 text-[10px]">⚔️ Strength</span>
                     <span className="font-bold">{activeCompanion.strength || 10}</span>
                   </div>
+                  <div className="flex justify-between">
+                    <span className="text-black/40 text-[10px]">🧠 Intelligence</span>
+                    <span className="font-bold">{activeCompanion.intelligence || 10}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-black/40 text-[10px]">🍀 Luck</span>
+                    <span className="font-bold">{activeCompanion.luck || 10}</span>
+                  </div>
+                </div>
+
+                <div className="mt-3 pt-3 border-t border-black/5 text-xs text-black/60 font-mono italic leading-relaxed">
+                  {activeCompanion.description}
                 </div>
               </div>
             </>
@@ -398,6 +450,14 @@ export default function Home() {
                       Lvl {card.level}
                     </span>
                   </div>
+                  <div className="flex flex-col gap-0.5 mb-2 font-mono text-[9px] text-black/50">
+                    <div className="flex items-center gap-1.5">
+                      <span className="bg-[#4C6B00]/10 text-[#4C6B00] border border-[#4C6B00]/20 px-1 py-0.2 rounded font-bold uppercase text-[8px]">
+                        {card.role}
+                      </span>
+                      <span className="truncate max-w-[130px]">{card.group}</span>
+                    </div>
+                  </div>
                   <p className="font-mono text-[9px] text-black/40 mb-3">
                     Stage {card.evolutionLvl} · EXP: {card.xp}
                   </p>
@@ -454,217 +514,26 @@ export default function Home() {
                       <span className="text-black/40 text-[9px]">Strength</span>
                       <span className="font-bold">{card.strength || 10}</span>
                     </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/40 text-[9px]">Intellect</span>
+                      <span className="font-bold">{card.intelligence || 10}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/40 text-[9px]">Luck</span>
+                      <span className="font-bold">{card.luck || 10}</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-2.5 pt-2 border-t border-black/5 text-[9px] text-black/50 font-mono italic leading-relaxed">
+                    {card.description}
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <>
-              {/* Fallback mock cards with the exact same visual details */}
-              <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm flex flex-col gap-3 relative">
-                <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
-                  <span>#0417</span>
-                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
-                    robin@x.com
-                  </span>
-                </div>
-                <PixelPetRenderer companionName="Robin Fox" species="fox" evolutionLvl={1} className="w-full h-48" />
-                <div className="border-t border-black/5 pt-3 mt-1">
-                  <div className="flex justify-between items-center mb-1">
-                    <h3 className="font-display font-bold text-base text-black">Robin Fox</h3>
-                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 text-[9px] font-mono rounded-full uppercase tracking-wider">Lvl 1</span>
-                  </div>
-                  <p className="font-mono text-[9px] text-black/40 mb-3">Stage 1 · EXP: 45</p>
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">❤️ HP</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-red-500 h-full w-[100%]"></div></div>
-                        <span className="text-[9px]">100</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-yellow-500 h-full w-[90%]"></div></div>
-                        <span className="text-[9px]">90</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-orange-500 h-full w-[15%]"></div></div>
-                        <span className="text-[9px]">15</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">😊 Hpy</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-green-500 h-full w-[65%]"></div></div>
-                        <span className="text-[9px]">65</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70 mt-2 pt-2 border-t border-black/5">
-                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Friendship</span><span className="font-bold">12</span></div>
-                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Strength</span><span className="font-bold">10</span></div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm flex flex-col gap-3 relative">
-                <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
-                  <span>#0418</span>
-                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
-                    hartley@x.com
-                  </span>
-                </div>
-                <PixelPetRenderer companionName="Hartley" species="deer" evolutionLvl={2} className="w-full h-48" />
-                <div className="border-t border-black/5 pt-3 mt-1">
-                  <div className="flex justify-between items-center mb-1">
-                    <h3 className="font-display font-bold text-base text-black">Hartley</h3>
-                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 text-[9px] font-mono rounded-full uppercase tracking-wider">Lvl 2</span>
-                  </div>
-                  <p className="font-mono text-[9px] text-black/40 mb-3">Stage 2 · EXP: 120</p>
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">❤️ HP</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-red-500 h-full w-[95%]"></div></div>
-                        <span className="text-[9px]">95</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-yellow-500 h-full w-[80%]"></div></div>
-                        <span className="text-[9px]">80</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-orange-500 h-full w-[45%]"></div></div>
-                        <span className="text-[9px]">45</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">😊 Hpy</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-green-500 h-full w-[70%]"></div></div>
-                        <span className="text-[9px]">70</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70 mt-2 pt-2 border-t border-black/5">
-                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Friendship</span><span className="font-bold">45</span></div>
-                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Strength</span><span className="font-bold">14</span></div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm flex flex-col gap-3 relative">
-                <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
-                  <span>#0419</span>
-                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
-                    olliver@x.com
-                  </span>
-                </div>
-                <PixelPetRenderer companionName="Olliver" species="owl" evolutionLvl={1} className="w-full h-48" />
-                <div className="border-t border-black/5 pt-3 mt-1">
-                  <div className="flex justify-between items-center mb-1">
-                    <h3 className="font-display font-bold text-base text-black">Olliver</h3>
-                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 text-[9px] font-mono rounded-full uppercase tracking-wider">Lvl 1</span>
-                  </div>
-                  <p className="font-mono text-[9px] text-black/40 mb-3">Stage 1 · EXP: 10</p>
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">❤️ HP</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-red-500 h-full w-[100%]"></div></div>
-                        <span className="text-[9px]">100</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-yellow-500 h-full w-[40%]"></div></div>
-                        <span className="text-[9px]">40</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-orange-500 h-full w-[80%]"></div></div>
-                        <span className="text-[9px]">80</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">😊 Hpy</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-green-500 h-full w-[35%]"></div></div>
-                        <span className="text-[9px]">35</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70 mt-2 pt-2 border-t border-black/5">
-                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Friendship</span><span className="font-bold">5</span></div>
-                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Strength</span><span className="font-bold">8</span></div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm flex flex-col gap-3 relative">
-                <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
-                  <span>#0420</span>
-                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
-                    harelock@x.com
-                  </span>
-                </div>
-                <PixelPetRenderer companionName="Harelock" species="rabbit" evolutionLvl={3} className="w-full h-48" />
-                <div className="border-t border-black/5 pt-3 mt-1">
-                  <div className="flex justify-between items-center mb-1">
-                    <h3 className="font-display font-bold text-base text-black">Harelock</h3>
-                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 text-[9px] font-mono rounded-full uppercase tracking-wider">Lvl 3</span>
-                  </div>
-                  <p className="font-mono text-[9px] text-black/40 mb-3">Stage 3 · EXP: 310</p>
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">❤️ HP</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-red-500 h-full w-[100%]"></div></div>
-                        <span className="text-[9px]">100</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-yellow-500 h-full w-[100%]"></div></div>
-                        <span className="text-[9px]">100</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-orange-500 h-full w-[0%]"></div></div>
-                        <span className="text-[9px]">0</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-black/40">😊 Hpy</span>
-                      <div className="flex items-center gap-1">
-                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-green-500 h-full w-[95%]"></div></div>
-                        <span className="text-[9px]">95</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70 mt-2 pt-2 border-t border-black/5">
-                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Friendship</span><span className="font-bold">85</span></div>
-                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Strength</span><span className="font-bold">24</span></div>
-                  </div>
-                </div>
-              </div>
-            </>
+            <div className="col-span-full text-center py-12 text-black/40 font-mono text-xs">
+              No companion records found in database.
+            </div>
           )}
         </div>
       </section>

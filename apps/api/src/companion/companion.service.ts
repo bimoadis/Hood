@@ -55,6 +55,25 @@ export class CompanionService {
     const personalities = ['Brave', 'Wise', 'Curious', 'Lazy'];
     const personality = personalities[Math.floor(Math.random() * personalities.length)];
 
+    // Define custom starting stats based on role
+    let strength = 12;
+    let intelligence = 12;
+    let luck = 12;
+
+    if (characterInfo.role === 'Guardian') {
+      strength = 18;
+      intelligence = 8;
+      luck = 8;
+    } else if (characterInfo.role === 'Sage' || characterInfo.role === 'Strategist') {
+      strength = 8;
+      intelligence = 18;
+      luck = 8;
+    } else if (characterInfo.role === 'Rogue' || characterInfo.role === 'Smuggler') {
+      strength = 10;
+      intelligence = 10;
+      luck = 18;
+    }
+
     // 4. Create companion
     const companion = await this.prisma.companion.create({
       data: {
@@ -62,12 +81,18 @@ export class CompanionService {
         name: name || characterInfo.characterName,
         species,
         personality,
+        role: characterInfo.role,
+        group: characterInfo.group,
+        description: characterInfo.description,
         level: 1,
         xp: 0,
         energy: 100,
         health: 100,
         hunger: 0,
         happiness: 50,
+        strength,
+        intelligence,
+        luck,
       },
     });
     
