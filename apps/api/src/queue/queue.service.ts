@@ -120,20 +120,68 @@ export class QueueService {
         newHealth = Math.min(100, newHealth + healthIncrement);
         let newEnergy = Math.min(100, Math.max(0, companion.energy - 10 + energyIncrement)); // Deduct 10 energy per interaction
 
+        // Roll a random mood for the companion
+        const moods = ['Happy', 'Excited', 'Calm', 'Tired', 'Starving', 'Energetic', 'Sick', 'Playful', 'Serious'];
+        const rolledMood = moods[Math.floor(Math.random() * moods.length)];
+
         // Dynamically compute companion's description adjusting to mood
         const characterRoleKey = Object.keys(CHARACTER_ROLES).find(key => CHARACTER_ROLES[key].characterName === companion.name) ||
-                                 Object.keys(CHARACTER_ROLES).find(key => CHARACTER_ROLES[key].role === companion.role);
+                                 Object.keys(CHARACTER_ROLES).find(key => CHARACTER_ROLES[key].role === companion.role) ||
+                                 Object.keys(CHARACTER_ROLES).find(key => {
+                                   const speciesMap: Record<string, string> = {
+                                     'Robin Fox': 'Fox',
+                                     'Hartley': 'Deer',
+                                     'Little John': 'Bear',
+                                     'Harelock': 'Hare',
+                                     'Nutley': 'Squirrel',
+                                     'Badgerick': 'Badger',
+                                     'Olliver': 'Owl',
+                                     'Willow': 'Fox',
+                                     'Prickle': 'Hedgehog',
+                                     'Rook': 'Rook',
+                                     'Merry': 'Mouse',
+                                     'Cawthorne': 'Crow'
+                                   };
+                                   return speciesMap[key]?.toLowerCase() === companion.species?.toLowerCase();
+                                 });
         const baselineDesc = characterRoleKey ? CHARACTER_ROLES[characterRoleKey].description : "A loyal companion.";
 
         let moodStatus = "";
+        switch (rolledMood) {
+          case 'Happy':
+            moodStatus = " Currently feeling very happy and content with their achievements.";
+            break;
+          case 'Excited':
+            moodStatus = " Bursting with excitement, looking around eagerly for the next quest!";
+            break;
+          case 'Calm':
+            moodStatus = " Sitting quietly under the shade of a large oak tree, resting peacefully.";
+            break;
+          case 'Tired':
+            moodStatus = " Yawning sluggishly, looking like they could use a quick nap.";
+            break;
+          case 'Starving':
+            moodStatus = " Rubbing their stomach hungrily, wishing for a delicious forest gyoza.";
+            break;
+          case 'Energetic':
+            moodStatus = " Bouncing on their feet, fully energized and ready for action!";
+            break;
+          case 'Sick':
+            moodStatus = " Shivering slightly and sneezing, in need of some medicine and rest.";
+            break;
+          case 'Playful':
+            moodStatus = " Doing flips and playfully trying to grab your attention!";
+            break;
+          case 'Serious':
+            moodStatus = " Focused and highly alert, eyes darting around to scan the surroundings.";
+            break;
+        }
+
+        // Apply vital overrides if stats are critical
         if (newHealth === 0) {
-          moodStatus = " (Currently sick and needs rest)";
+          moodStatus = " Currently sick and incapacitated, unable to train until healed.";
         } else if (newHunger > 80) {
-          moodStatus = " (Starving and asking for food)";
-        } else if (newEnergy < 20) {
-          moodStatus = " (Very sleepy and exhausted)";
-        } else if (newHappiness > 80) {
-          moodStatus = " (Very cheerful and happy)";
+          moodStatus = " Holding their stomach in extreme hunger, begging for food.";
         }
 
         const dynamicDescription = `${baselineDesc}${moodStatus}`;
@@ -153,6 +201,7 @@ export class QueueService {
             happiness: newHappiness,
             friendship: newFriendship,
             energy: newEnergy,
+            mood: rolledMood,
             description: dynamicDescription,
           },
         });
