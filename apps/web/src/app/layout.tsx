@@ -3,7 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Hoodlings — Your ASCII companion, running on chain",
+  title: "Hoodnest — Your pixel companion, running on chain",
   description: "An immersive virtual pet and RPG simulation set in the medieval Robin Hood universe, raised in public on X.",
 };
 
@@ -57,7 +57,7 @@ export default function RootLayout({
           <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3">
               <div className="w-7 h-7 bg-black rounded-lg flex items-center justify-center font-display font-bold text-[#CCFF00] text-sm">H</div>
-              <span className="font-display font-bold text-xl tracking-tight text-black">Hoodlings<span className="text-[#4C6B00]">.</span></span>
+              <span className="font-display font-bold text-xl tracking-tight text-black">Hoodnest<span className="text-[#4C6B00]">.</span></span>
             </Link>
             <nav className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-black/50">
               <Link href="/" className="hover:text-black transition">Home</Link>
@@ -73,7 +73,7 @@ export default function RootLayout({
         {/* Footer */}
         <footer className="border-t border-black/10 mt-auto bg-[#FAFAF7]">
           <div className="max-w-6xl mx-auto px-6 py-10 font-mono text-[11px] text-black/40 flex flex-wrap justify-between gap-4">
-            <div>© 2026 Hoodlings · a trading terminal for tiny lives</div>
+            <div>© 2026 Hoodnest · a trading terminal for tiny lives</div>
             <div className="flex items-center gap-2">
               <span className="live-dot"></span>
               <span>Systems <span className="text-[#4C6B00]">▲ Normal</span></span>

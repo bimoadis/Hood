@@ -309,7 +309,7 @@ export default function Home() {
             <span className="text-[#4C6B00]">running on chain.</span>
           </h1>
           <p className="text-black/60 text-lg max-w-md mb-8 leading-relaxed">
-            Hoodlings is the forest virtual pet platform on X — hatch a companion in Sherwood forest today, and train it to be a legendary Robin Hood protector using custom Pixel Art composites.
+            Hoodnest is the forest virtual pet platform on X — hatch a companion in Sherwood forest today, and train it to be a legendary Robin Hood protector using custom Pixel Art composites.
           </p>
           <div className="flex flex-wrap gap-4 mb-10">
             <a

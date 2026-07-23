@@ -20,7 +20,7 @@ export default function GalleryPage() {
     <div className="min-h-screen bg-[#F2F2EC] text-[#1f2937] font-mono p-8">
       <div className="max-w-6xl mx-auto">
         <header className="mb-12 border-b border-black/10 pb-6">
-          <h1 className="text-4xl font-bold tracking-tight text-[#047857] mb-2">🌲 HOODLINGS GALLERY</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-[#047857] mb-2">🌲 HOODNEST GALLERY</h1>
           <p className="text-gray-600">Explore the complete registry of active outlaw companions, their tactical roles, and divisions.</p>
         </header>
 

@@ -80,7 +80,7 @@ export class CardRendererService {
     ctx.fillStyle = '#111827';
     ctx.font = 'bold 36px monospace';
     ctx.textAlign = 'left';
-    ctx.fillText(`HOODLINGS OUTLAW REGISTRY`, 80, 100);
+    ctx.fillText(`HOODNEST OUTLAW REGISTRY`, 80, 100);
 
     ctx.fillStyle = '#4B5563';
     ctx.font = '24px monospace';

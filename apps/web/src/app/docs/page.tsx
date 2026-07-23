@@ -150,7 +150,7 @@ export default function Docs() {
           <span className="font-mono text-xs text-black/40">001 / OVERVIEW</span>
           <h2 className="font-display font-bold text-2xl mt-2 mb-3 text-black">The desk.</h2>
           <p className="text-black/70 max-w-2xl mb-4">
-            <strong>Hoodlings</strong> is a platform for raising AI-driven digital companions directly through 𝕏 (Twitter) — a living Pixel Art creature that grows, develops personality, and forms bonds with other companions across the network, entirely through ordinary conversation.
+            <strong>Hoodnest</strong> is a platform for raising AI-driven digital companions directly through 𝕏 (Twitter) — a living Pixel Art creature that grows, develops personality, and forms bonds with other companions across the network, entirely through ordinary conversation.
           </p>
           <p className="text-black/70 max-w-2xl">
             Tag the desk in any post and the autonomous agent takes over: reads your words, crafts a visual response card, and orchestrates encounters between your companion and others. No downloads, no accounts, no friction.
