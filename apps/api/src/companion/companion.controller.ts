@@ -16,50 +16,26 @@ export class CompanionController {
       take: 4,
       include: {
         user: true,
-        memories: {
-          orderBy: { createdAt: 'desc' },
-          take: 1,
-        },
       },
     });
 
     return companions.map((c, index) => {
-      const latestMemory = c.memories[0];
-      let cardType = "Status card";
-      let title = "Status Normal";
-      let description = `Companion ${c.name} is active in Sherwood.`;
-
-      if (latestMemory) {
-        if (latestMemory.memoryKey === 'last_adventure') {
-          cardType = "Adventure card";
-          title = "Adventure log";
-          description = latestMemory.memoryValue;
-        } else if (latestMemory.memoryKey === 'reply_history') {
-          cardType = "Interaction card";
-          title = "Command post";
-          description = latestMemory.memoryValue;
-        } else if (latestMemory.memoryKey === 'bot_response') {
-          cardType = "Status card";
-          title = "AI Response";
-          description = latestMemory.memoryValue;
-        }
-      } else {
-        cardType = "Hatching card";
-        title = "New Outlaw Alert";
-        description = `${c.name} the ${c.species} has joined the outlaws in Sherwood forest.`;
-      }
-
       return {
         id: c.id,
-        cardType,
-        cardNumber: `#0${417 + index}`,
-        companionName: c.name,
+        name: c.name,
         species: c.species,
+        level: c.level,
         evolutionLvl: c.evolutionLvl,
-        title,
-        description,
-        bottomLeft: `Level ${c.level}`,
-        bottomRight: c.mood,
+        xp: c.xp,
+        health: c.health,
+        energy: c.energy,
+        hunger: c.hunger,
+        happiness: c.happiness,
+        friendship: c.friendship,
+        strength: c.strength,
+        mood: c.mood,
+        cardNumber: `#0${417 + index}`,
+        userEmail: c.user?.email || 'unknown@x.com',
       };
     });
   }

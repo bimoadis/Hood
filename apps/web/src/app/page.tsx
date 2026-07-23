@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import PixelPetRenderer from "@/components/PixelPetRenderer";
-import CompanionCard from "@/components/CompanionCard";
 
 interface Companion {
   name: string;
@@ -30,16 +29,23 @@ interface UserCompanion {
 
 interface CardData {
   id: string;
-  cardType: "Hatching card" | "Meal card" | "Status card" | "Adventure card";
-  cardNumber: string;
-  companionName: string;
+  name: string;
   species: string;
+  level: number;
   evolutionLvl: number;
-  title: string;
-  description: string;
-  bottomLeft: string;
-  bottomRight: string;
+  xp: number;
+  health: number;
+  energy: number;
+  hunger: number;
+  happiness: number;
+  friendship: number;
+  strength: number;
+  mood: string;
+  cardNumber: string;
+  userEmail: string;
 }
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 export default function Home() {
   const [email, setEmail] = useState("mock_user@x.com");
@@ -53,7 +59,7 @@ export default function Home() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3001/api/companion/user/${targetEmail}`);
+      const response = await fetch(`${API_BASE_URL}/api/companion/user/${targetEmail}`);
       if (!response.ok) {
         throw new Error("User or companion data not found on API");
       }
@@ -93,7 +99,7 @@ export default function Home() {
   useEffect(() => {
     const fetchLatestCards = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/companion/latest");
+        const response = await fetch(`${API_BASE_URL}/api/companion/latest`);
         if (response.ok) {
           const data = await response.json() as CardData[];
           setLatestCards(data);
@@ -114,7 +120,7 @@ export default function Home() {
 
   const handleHatchMock = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/companion/hatch", {
+      const response = await fetch(`${API_BASE_URL}/api/companion/hatch`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -122,7 +128,7 @@ export default function Home() {
       if (response.ok) {
         fetchCompanionData(email);
         // Refresh latest cards section too
-        const latestResponse = await fetch("http://localhost:3001/api/companion/latest");
+        const latestResponse = await fetch(`${API_BASE_URL}/api/companion/latest`);
         if (latestResponse.ok) {
           const data = await latestResponse.json() as CardData[];
           setLatestCards(data);
@@ -204,7 +210,7 @@ export default function Home() {
 
         {/* Dynamic Stacking Card representation */}
         <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm max-w-md w-full justify-self-center md:justify-self-end flex flex-col gap-3 relative">
-          
+
           {/* User email in the top right corner of the card */}
           <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
             <div className="flex items-center gap-2">
@@ -365,75 +371,304 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {latestCards.length > 0 ? (
             latestCards.map((card) => (
-              <CompanionCard
-                key={card.id}
-                cardType={card.cardType}
-                cardNumber={card.cardNumber}
-                companionName={card.companionName}
-                species={card.species}
-                evolutionLvl={card.evolutionLvl}
-                title={card.title}
-                description={card.description}
-                bottomLeft={card.bottomLeft}
-                bottomRight={card.bottomRight}
-              />
+              <div key={card.id} className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm flex flex-col gap-3 relative">
+                {/* User email in the top right corner of the card */}
+                <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
+                  <span>{card.cardNumber}</span>
+                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal truncate max-w-[120px]">
+                    {card.userEmail}
+                  </span>
+                </div>
+
+                {/* Stacking Pixel Art composite view */}
+                <PixelPetRenderer
+                  companionName={card.name}
+                  species={card.species}
+                  evolutionLvl={card.evolutionLvl}
+                  className="w-full h-48"
+                />
+
+                {/* Companion Stats Grid below the image */}
+                <div className="border-t border-black/5 pt-3 mt-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className="font-display font-bold text-base text-black truncate max-w-[120px]">
+                      {card.name}
+                    </h3>
+                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 text-[9px] font-mono rounded-full uppercase tracking-wider">
+                      Lvl {card.level}
+                    </span>
+                  </div>
+                  <p className="font-mono text-[9px] text-black/40 mb-3">
+                    Stage {card.evolutionLvl} · EXP: {card.xp}
+                  </p>
+
+                  {/* Vitals */}
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">❤️ HP</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden">
+                          <div className="bg-red-500 h-full" style={{ width: `${card.health}%` }}></div>
+                        </div>
+                        <span className="text-[9px]">{card.health}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden">
+                          <div className="bg-yellow-500 h-full" style={{ width: `${card.energy}%` }}></div>
+                        </div>
+                        <span className="text-[9px]">{card.energy}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden">
+                          <div className="bg-orange-500 h-full" style={{ width: `${card.hunger}%` }}></div>
+                        </div>
+                        <span className="text-[9px]">{card.hunger}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">😊 Hpy</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden">
+                          <div className="bg-green-500 h-full" style={{ width: `${card.happiness}%` }}></div>
+                        </div>
+                        <span className="text-[9px]">{card.happiness}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70 mt-2 pt-2 border-t border-black/5">
+                    <div className="flex justify-between">
+                      <span className="text-black/40 text-[9px]">Friendship</span>
+                      <span className="font-bold">{card.friendship}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/40 text-[9px]">Strength</span>
+                      <span className="font-bold">{card.strength || 10}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))
           ) : (
             <>
-              <CompanionCard
-                cardType="Hatching card"
-                cardNumber="#0417"
-                companionName="Robin Fox"
-                species="fox"
-                evolutionLvl={1}
-                title="Zephyr — Cosmic Orb"
-                description="A new companion opens its eyes for the first time. Species assigned at random from the book."
-                bottomLeft="001 hatch"
-                bottomRight="stage: hatchling"
-              />
+              {/* Fallback mock cards with the exact same visual details */}
+              <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm flex flex-col gap-3 relative">
+                <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
+                  <span>#0417</span>
+                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
+                    robin@x.com
+                  </span>
+                </div>
+                <PixelPetRenderer companionName="Robin Fox" species="fox" evolutionLvl={1} className="w-full h-48" />
+                <div className="border-t border-black/5 pt-3 mt-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className="font-display font-bold text-base text-black">Robin Fox</h3>
+                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 text-[9px] font-mono rounded-full uppercase tracking-wider">Lvl 1</span>
+                  </div>
+                  <p className="font-mono text-[9px] text-black/40 mb-3">Stage 1 · EXP: 45</p>
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">❤️ HP</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-red-500 h-full w-[100%]"></div></div>
+                        <span className="text-[9px]">100</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-yellow-500 h-full w-[90%]"></div></div>
+                        <span className="text-[9px]">90</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-orange-500 h-full w-[15%]"></div></div>
+                        <span className="text-[9px]">15</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">😊 Hpy</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-green-500 h-full w-[65%]"></div></div>
+                        <span className="text-[9px]">65</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70 mt-2 pt-2 border-t border-black/5">
+                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Friendship</span><span className="font-bold">12</span></div>
+                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Strength</span><span className="font-bold">10</span></div>
+                  </div>
+                </div>
+              </div>
 
-              <CompanionCard
-                cardType="Meal card"
-                cardNumber="#0418"
-                companionName="Hartley"
-                species="deer"
-                evolutionLvl={2}
-                title='"served gyoza"'
-                description="Carefully dipping each one, savoring every bite! Hunger reset, meal count +1."
-                bottomLeft="meals: 7"
-                bottomRight="▲ satisfied"
-              />
+              <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm flex flex-col gap-3 relative">
+                <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
+                  <span>#0418</span>
+                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
+                    hartley@x.com
+                  </span>
+                </div>
+                <PixelPetRenderer companionName="Hartley" species="deer" evolutionLvl={2} className="w-full h-48" />
+                <div className="border-t border-black/5 pt-3 mt-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className="font-display font-bold text-base text-black">Hartley</h3>
+                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 text-[9px] font-mono rounded-full uppercase tracking-wider">Lvl 2</span>
+                  </div>
+                  <p className="font-mono text-[9px] text-black/40 mb-3">Stage 2 · EXP: 120</p>
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">❤️ HP</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-red-500 h-full w-[95%]"></div></div>
+                        <span className="text-[9px]">95</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-yellow-500 h-full w-[80%]"></div></div>
+                        <span className="text-[9px]">80</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-orange-500 h-full w-[45%]"></div></div>
+                        <span className="text-[9px]">45</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">😊 Hpy</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-green-500 h-full w-[70%]"></div></div>
+                        <span className="text-[9px]">70</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70 mt-2 pt-2 border-t border-black/5">
+                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Friendship</span><span className="font-bold">45</span></div>
+                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Strength</span><span className="font-bold">14</span></div>
+                  </div>
+                </div>
+              </div>
 
-              <CompanionCard
-                cardType="Status card"
-                cardNumber="#0419"
-                companionName="Olliver"
-                species="owl"
-                evolutionLvl={1}
-                title="Current position"
-                description="Hunger, mood, evolution stage and current activity, at a glance."
-                statusMetadata={{
-                  mood: "content",
-                  stage: "juvenile"
-                }}
-              />
+              <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm flex flex-col gap-3 relative">
+                <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
+                  <span>#0419</span>
+                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
+                    olliver@x.com
+                  </span>
+                </div>
+                <PixelPetRenderer companionName="Olliver" species="owl" evolutionLvl={1} className="w-full h-48" />
+                <div className="border-t border-black/5 pt-3 mt-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className="font-display font-bold text-base text-black">Olliver</h3>
+                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 text-[9px] font-mono rounded-full uppercase tracking-wider">Lvl 1</span>
+                  </div>
+                  <p className="font-mono text-[9px] text-black/40 mb-3">Stage 1 · EXP: 10</p>
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">❤️ HP</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-red-500 h-full w-[100%]"></div></div>
+                        <span className="text-[9px]">100</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-yellow-500 h-full w-[40%]"></div></div>
+                        <span className="text-[9px]">40</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-orange-500 h-full w-[80%]"></div></div>
+                        <span className="text-[9px]">80</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">😊 Hpy</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-green-500 h-full w-[35%]"></div></div>
+                        <span className="text-[9px]">35</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70 mt-2 pt-2 border-t border-black/5">
+                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Friendship</span><span className="font-bold">5</span></div>
+                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Strength</span><span className="font-bold">8</span></div>
+                  </div>
+                </div>
+              </div>
 
-              <CompanionCard
-                cardType="Adventure card"
-                cardNumber="#0420"
-                companionName="Harelock"
-                species="rabbit"
-                evolutionLvl={3}
-                weaponId="wood_bow"
-                title="Zephyr & Luna"
-                description="Building sandcastles on a cloud. Both owners notified, encounter logged."
-                bottomLeft="006 adventure"
-                bottomRight="owners: 2"
-              />
+              <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm flex flex-col gap-3 relative">
+                <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
+                  <span>#0420</span>
+                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 rounded text-[9px] font-bold lowercase tracking-normal">
+                    harelock@x.com
+                  </span>
+                </div>
+                <PixelPetRenderer companionName="Harelock" species="rabbit" evolutionLvl={3} className="w-full h-48" />
+                <div className="border-t border-black/5 pt-3 mt-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className="font-display font-bold text-base text-black">Harelock</h3>
+                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2 py-0.5 text-[9px] font-mono rounded-full uppercase tracking-wider">Lvl 3</span>
+                  </div>
+                  <p className="font-mono text-[9px] text-black/40 mb-3">Stage 3 · EXP: 310</p>
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">❤️ HP</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-red-500 h-full w-[100%]"></div></div>
+                        <span className="text-[9px]">100</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">⚡ Nrg</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-yellow-500 h-full w-[100%]"></div></div>
+                        <span className="text-[9px]">100</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">🍖 Hgr</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-orange-500 h-full w-[0%]"></div></div>
+                        <span className="text-[9px]">0</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-black/40">😊 Hpy</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1 bg-black/5 rounded-full h-1 overflow-hidden"><div className="bg-green-500 h-full w-[95%]"></div></div>
+                        <span className="text-[9px]">95</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-black/70 mt-2 pt-2 border-t border-black/5">
+                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Friendship</span><span className="font-bold">85</span></div>
+                    <div className="flex justify-between"><span className="text-black/40 text-[9px]">Strength</span><span className="font-bold">24</span></div>
+                  </div>
+                </div>
+              </div>
             </>
           )}
         </div>
       </section>
+
 
       {/* LIVE LOG */}
       <section className="max-w-6xl mx-auto px-6 py-16 border-t border-black/10">
