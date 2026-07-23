@@ -56,15 +56,19 @@ export default function RootLayout({
         <header className="border-b border-black/10 bg-white/85 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-7 h-7 bg-black rounded-lg flex items-center justify-center font-display font-bold text-[#CCFF00] text-sm">H</div>
+              <img
+                src="/logo.png"
+                alt="Hoodnest Logo"
+                className="w-7 h-7 rounded-lg object-cover"
+              />
               <span className="font-display font-bold text-xl tracking-tight text-black">Hoodnest<span className="text-[#4C6B00]">.</span></span>
             </Link>
             <nav className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-black/50">
               <Link href="/" className="hover:text-black transition">Home</Link>
               <Link href="/docs" className="hover:text-black transition">Docs</Link>
-              <a href="https://x.com/Hoodchi_rh" target="_blank" rel="noopener noreferrer" className="hover:text-black transition">𝕏</a>
+              <a href="https://x.com/HoodNestfun" target="_blank" rel="noopener noreferrer" className="hover:text-black transition">𝕏</a>
             </nav>
-            <a href="https://x.com/Hoodchi_rh" target="_blank" rel="noopener noreferrer" className="bg-[#CCFF00] hover:bg-[#DFFF3D] hover:shadow-[0_0_24px_rgba(140,179,0,0.35)] text-black font-semibold text-xs px-5 py-2.5 rounded-full transition-all duration-200">Hatch yours →</a>
+            <a href="https://x.com/HoodNestfun" target="_blank" rel="noopener noreferrer" className="bg-[#CCFF00] hover:bg-[#DFFF3D] hover:shadow-[0_0_24px_rgba(140,179,0,0.35)] text-black font-semibold text-xs px-5 py-2.5 rounded-full transition-all duration-200">Hatch yours →</a>
           </div>
         </header>
 

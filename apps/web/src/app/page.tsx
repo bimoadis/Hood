@@ -313,7 +313,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap gap-4 mb-10">
             <a
-              href="https://x.com/Hoodchi_rh"
+              href="https://x.com/HoodNestfun"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#CCFF00] hover:bg-[#DFFF3D] hover:shadow-[0_0_24px_rgba(140,179,0,0.35)] text-black font-semibold text-sm px-7 py-3 rounded-full transition-all duration-200"
@@ -667,7 +667,7 @@ export default function Home() {
           </div>
           <div>
             <a
-              href="https://x.com/Hoodchi_rh"
+              href="https://x.com/HoodNestfun"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-black hover:bg-neutral-900 text-white font-semibold text-sm px-8 py-3.5 rounded-full transition-all duration-200 inline-block whitespace-nowrap"
