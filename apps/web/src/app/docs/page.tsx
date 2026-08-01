@@ -136,7 +136,7 @@ export default function Docs() {
             Docs · Owner&apos;s manual · v1.0
           </span>
           <h1 className="font-display font-bold text-4xl lg:text-5xl mt-3 leading-tight text-black">
-            Your pixel companion,<br />running on chain.
+            Your pixel companion,<br />running on Solana.
           </h1>
           <div className="flex gap-6 mt-5 font-mono text-xs text-black/50">
             <span><span className="text-[#4C6B00] font-bold">▲</span> 11 sections</span>
@@ -150,7 +150,7 @@ export default function Docs() {
           <span className="font-mono text-xs text-black/40">001 / OVERVIEW</span>
           <h2 className="font-display font-bold text-2xl mt-2 mb-3 text-black">The desk.</h2>
           <p className="text-black/70 max-w-2xl mb-4">
-            <strong>Hoodnest</strong> is a platform for raising AI-driven digital companions directly through 𝕏 (Twitter) — a living Pixel Art creature that grows, develops personality, and forms bonds with other companions across the network, entirely through ordinary conversation.
+            <strong>Hoodnest</strong> is a platform on Solana launched on pump.fun for raising AI-driven digital companions directly through 𝕏 (Twitter) — a living Pixel Art creature that grows, develops personality, and forms bonds with other companions across the network, entirely through ordinary conversation.
           </p>
           <p className="text-black/70 max-w-2xl">
             Tag the desk in any post and the autonomous agent takes over: reads your words, crafts a visual response card, and orchestrates encounters between your companion and others. No downloads, no accounts, no friction.

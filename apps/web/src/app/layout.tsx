@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Hoodnest — Your pixel companion, running on chain",
-  description: "An immersive virtual pet and RPG simulation set in the medieval Robin Hood universe, raised in public on X.",
+  title: "Hoodnest — Your pixel companion, running on Solana",
+  description: "An immersive virtual pet and RPG simulation set in the medieval Robin Hood universe, launched on pump.fun, raised in public on X.",
 };
 
 export default function RootLayout({
@@ -39,14 +39,15 @@ export default function RootLayout({
         {/* Ticker marquee header */}
         <div className="ticker-wrap">
           <div className="ticker">
-            <span>HOODCHI DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
-            <span>SPECIES CATALOG <span className="tk-up">▲ 100+</span></span>
+            <span>HOODNEST DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
+            <span>CHAIN <span className="tk-up">▲ SOLANA</span></span>
+            <span>LAUNCH <span className="tk-up">▲ PUMP.FUN</span></span>
             <span>MINT PRICE <span className="tk-up">▲ $0.00</span></span>
             <span>FEED COOLDOWN <span className="tk-down">▼ 60:00</span></span>
             <span>NETWORK <span className="tk-up">▲ 𝕏 · LIVE</span></span>
-            <span>HOODCHI DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
-            <span>SPECIES CATALOG <span className="tk-up">▲ 100+</span></span>
-            <span>MINT PRICE <span className="tk-up">▲ $0.00</span></span>
+            <span>HOODNEST DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
+            <span>CHAIN <span className="tk-up">▲ SOLANA</span></span>
+            <span>LAUNCH <span className="tk-up">▲ PUMP.FUN</span></span>
             <span>FEED COOLDOWN <span className="tk-down">▼ 60:00</span></span>
             <span>NETWORK <span className="tk-up">▲ 𝕏 · LIVE</span></span>
           </div>
