@@ -136,7 +136,7 @@ export default function Docs() {
             Docs · Owner&apos;s manual · v1.0
           </span>
           <h1 className="font-display font-bold text-4xl lg:text-5xl mt-3 leading-tight text-black">
-            Your pixel companion,<br />running on Solana.
+            Your pixel companion,<br />running on Solana Chain.
           </h1>
           <div className="flex gap-6 mt-5 font-mono text-xs text-black/50">
             <span><span className="text-[#4C6B00] font-bold">▲</span> 11 sections</span>

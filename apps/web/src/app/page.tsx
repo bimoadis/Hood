@@ -306,10 +306,10 @@ export default function Home() {
           </span>
           <h1 className="font-display font-bold text-5xl lg:text-6xl leading-[1.02] tracking-tight mb-5 text-black">
             Your companion,<br />
-            <span className="text-[#4C6B00]">running on Solana.</span>
+            <span className="text-[#4C6B00]">running on Solana Chain.</span>
           </h1>
           <p className="text-black/60 text-lg max-w-md mb-8 leading-relaxed">
-            Hoodnest is the forest virtual pet platform on Solana, launched on pump.fun. Hatch a companion in Sherwood forest today, and train it to be a legendary Robin Hood protector using custom Pixel Art composites.
+            Hoodnest is the forest virtual pet platform on X — hatch a companion in Sherwood forest today, and train it to be a legendary Robin Hood protector using custom Pixel Art composites.
           </p>
           <div className="flex flex-wrap gap-4 mb-10">
             <a
