@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import PixelPetRenderer from "@/components/PixelPetRenderer";
 
@@ -176,9 +176,25 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [latestCards, setLatestCards] = useState<CardData[]>([]);
 
-  const fetchCompanionData = async (targetEmail: string) => {
-    setLoading(true);
+  const fetchCompanionData = useCallback(async (targetEmail: string) => {
+    // Try to load cached data first for instant loading
+    if (typeof window !== "undefined") {
+      const cached = localStorage.getItem(`companion_${targetEmail}`);
+      if (cached) {
+        try {
+          setUserCompanion(JSON.parse(cached));
+          setLoading(false);
+        } catch (e) {
+          console.warn("Failed to parse cached companion data", e);
+        }
+      } else {
+        setLoading(true);
+      }
+    } else {
+      setLoading(true);
+    }
     setError(null);
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/companion/user/${targetEmail}`);
       if (!response.ok) {
@@ -186,49 +202,75 @@ export default function Home() {
       }
       const data = await response.json() as UserCompanion;
       setUserCompanion(data);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(`companion_${targetEmail}`, JSON.stringify(data));
+      }
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : "Failed to fetch";
       console.warn("Failed to fetch from backend API. Using local mock fallback.", errMsg);
       setError(errMsg);
-      // Fallback to static mock representation
-      setUserCompanion({
-        user: { email: targetEmail, name: targetEmail.split("@")[0] },
-        companion: {
-          name: "Robin Fox",
-          species: "Fox",
-          level: 1,
-          evolutionLvl: 1,
-          xp: 45,
-          health: 100,
-          energy: 90,
-          hunger: 15,
-          happiness: 65,
-          friendship: 12,
-          strength: 10,
-          intelligence: 10,
-          luck: 10,
-          role: "Ranger",
-          group: "Forest Rangers",
-          description: "Group leader. Expert in archery, strategizing, and leading ambush or rescue missions.",
-          mood: "Happy"
+      
+      // Fallback to static mock representation only if no cached data exists
+      setUserCompanion(prev => {
+        if (prev) return prev;
+        const fallbackData = {
+          user: { email: targetEmail, name: targetEmail.split("@")[0] },
+          companion: {
+            name: "Robin Fox",
+            species: "Fox",
+            level: 1,
+            evolutionLvl: 1,
+            xp: 45,
+            health: 100,
+            energy: 90,
+            hunger: 15,
+            happiness: 65,
+            friendship: 12,
+            strength: 10,
+            intelligence: 10,
+            luck: 10,
+            role: "Ranger",
+            group: "Forest Rangers",
+            description: "Group leader. Expert in archery, strategizing, and leading ambush or rescue missions.",
+            mood: "Happy"
+          }
+        };
+        if (typeof window !== "undefined") {
+          localStorage.setItem(`companion_${targetEmail}`, JSON.stringify(fallbackData));
         }
+        return fallbackData;
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchCompanionData(email);
-  }, [email]);
+  }, [email, fetchCompanionData]);
 
   useEffect(() => {
+    // Try to load cached latest cards first
+    if (typeof window !== "undefined") {
+      const cachedCards = localStorage.getItem("latest_cards");
+      if (cachedCards) {
+        try {
+          setLatestCards(JSON.parse(cachedCards));
+        } catch (e) {
+          console.warn("Failed to parse cached latest cards", e);
+        }
+      }
+    }
+
     const fetchLatestCards = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/companion/latest`);
         if (response.ok) {
           const data = await response.json() as CardData[];
           setLatestCards(data);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("latest_cards", JSON.stringify(data));
+          }
         }
       } catch (err) {
         console.warn("Failed to fetch latest cards from database. Using static fallbacks.", err);
