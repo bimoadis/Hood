@@ -175,6 +175,13 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [latestCards, setLatestCards] = useState<CardData[]>([]);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyCA = () => {
+    navigator.clipboard.writeText("7RsgazLLdQu7YsqtydJ6NzbnMKKfSCZkwgmzEiYDpump");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const fetchCompanionData = useCallback(async (targetEmail: string) => {
     // Try to load cached data first for instant loading
@@ -343,9 +350,29 @@ export default function Home() {
       {/* HERO */}
       <section className="max-w-6xl mx-auto px-6 pt-20 pb-16 grid md:grid-cols-2 gap-12 items-start">
         <div>
-          <span className="font-mono text-xs uppercase tracking-widest text-black/40 flex items-center gap-2 mb-5">
-            <span className="live-dot"></span> Live on 𝕏 · systems normal
-          </span>
+          <div className="flex flex-wrap items-center gap-3 mb-5">
+            <span className="font-mono text-xs uppercase tracking-widest text-black/40 flex items-center gap-2">
+              <span className="live-dot"></span> Live on 𝕏 · systems normal
+            </span>
+            <span className="text-black/20 font-mono text-xs">•</span>
+            <button 
+              onClick={handleCopyCA}
+              className="group flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#4C6B00] bg-[#4C6B00]/8 border border-[#4C6B00]/25 px-2.5 py-0.5 rounded-full transition-all duration-200 hover:bg-[#4C6B00]/15 hover:border-[#4C6B00]/40 focus:outline-none"
+              title="Click to copy CA"
+            >
+              <span>CA: {copied ? "Copied!" : "7Rsg...pump"}</span>
+              {copied ? (
+                <svg className="w-3 h-3 text-[#4C6B00]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+              ) : (
+                <svg className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                </svg>
+              )}
+            </button>
+          </div>
           <h1 className="font-display font-bold text-5xl lg:text-6xl leading-[1.02] tracking-tight mb-5 text-black">
             Your companion,<br />
             <span className="text-[#4C6B00]">running on Solana.</span>

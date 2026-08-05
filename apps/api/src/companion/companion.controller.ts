@@ -13,7 +13,6 @@ export class CompanionController {
   async getLatestCompanions() {
     const companions = await this.prisma.companion.findMany({
       orderBy: { createdAt: 'desc' },
-      take: 4,
       include: {
         user: true,
       },
