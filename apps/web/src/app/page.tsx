@@ -360,7 +360,7 @@ export default function Home() {
               className="group flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#4C6B00] bg-[#4C6B00]/8 border border-[#4C6B00]/25 px-2.5 py-0.5 rounded-full transition-all duration-200 hover:bg-[#4C6B00]/15 hover:border-[#4C6B00]/40 focus:outline-none"
               title="Click to copy CA"
             >
-              <span>CA: {copied ? "Copied!" : "7Rsg...pump"}</span>
+              <span>CA: {copied ? "Copied!" : "Coming Soon"}</span>
               {copied ? (
                 <svg className="w-3 h-3 text-[#4C6B00]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
