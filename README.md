@@ -2,7 +2,7 @@
 
 Hoodfolk is a forest virtual pet platform running on Solana and deeply integrated with 𝕏. Hatch a companion in Sherwood forest today, train it to become a legendary Robin Hood protector using custom Pixel Art composites, and raise it in public via autonomous interactive encounters on 𝕏.
 
-**Contract Address (CA):** `H763R1ZUTpQJKrbRfT6geyMswsbw7XSJxCeTDqg8pump`
+**Contract Address (CA):** `Coming Soon`
 
 ---
 
