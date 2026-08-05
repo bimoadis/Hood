@@ -61,11 +61,11 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-3">
             <img
               src="/logo.png"
-              alt="Hoodnest Logo"
+              alt="Hoodfolk Logo"
               className="w-7 h-7 rounded-lg object-cover"
             />
             <span className="font-display font-bold text-xl tracking-tight text-black">
-              Hoodnest<span className="text-[#4C6B00]">.</span>
+              Hoodfolk<span className="text-[#4C6B00]">.</span>
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-black/50">
@@ -123,7 +123,7 @@ export default function Header() {
                 <div className="text-5xl animate-pulse">🐣</div>
                 <h3 className="font-display font-extrabold text-2xl text-black">Step 1: Go to 𝕏</h3>
                 <p className="text-black/60 text-sm leading-relaxed max-w-xs">
-                  Click continue at the end of this guide to open our official Twitter profile <span className="font-bold text-[#4C6B00]">@HoodNestfun</span>.
+                  Click continue at the end of this guide to open our official Twitter profile <span className="font-bold text-[#4C6B00]">@HoodFolkTech</span>.
                 </p>
               </div>
             )}
@@ -133,7 +133,7 @@ export default function Header() {
                 <div className="text-5xl">⚡</div>
                 <h3 className="font-display font-extrabold text-2xl text-black">Step 2: Crack Your Egg</h3>
                 <p className="text-black/60 text-sm leading-relaxed max-w-xs">
-                  Every time you tag <span className="font-bold text-[#4C6B00]">@hoodnest</span> on X, your egg cracks and your Hoodling starts growing!
+                  Every time you tag <span className="font-bold text-[#4C6B00]">@hoodfolktech</span> on X, your egg cracks and your Hoodling starts growing!
                 </p>
               </div>
             )}
@@ -223,7 +223,7 @@ export default function Header() {
                   </>
                 ) : (
                   <a
-                    href="https://x.com/HoodNestfun"
+                    href="https://x.com/HoodFolkTech"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setShowOnboarding(false)}

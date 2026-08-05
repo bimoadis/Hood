@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hoodnest-cache-v2';
+const CACHE_NAME = 'hoodfolk-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/gallery',

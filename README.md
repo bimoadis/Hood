@@ -1,6 +1,6 @@
-# 🌲 Hoodnest
+# 🌲 Hoodfolk
 
-Hoodnest is a forest virtual pet platform running on Solana and deeply integrated with 𝕏. Hatch a companion in Sherwood forest today, train it to become a legendary Robin Hood protector using custom Pixel Art composites, and raise it in public via autonomous interactive encounters on 𝕏.
+Hoodfolk is a forest virtual pet platform running on Solana and deeply integrated with 𝕏. Hatch a companion in Sherwood forest today, train it to become a legendary Robin Hood protector using custom Pixel Art composites, and raise it in public via autonomous interactive encounters on 𝕏.
 
 **Contract Address (CA):** `H763R1ZUTpQJKrbRfT6geyMswsbw7XSJxCeTDqg8pump`
 
@@ -44,7 +44,7 @@ Create a `.env` file in the root workspace folder:
 
 ```env
 # Database Settings
-DATABASE_URL="postgresql://user:password@localhost:5432/hoodnest?schema=public"
+DATABASE_URL="postgresql://user:password@localhost:5432/hoodfolk?schema=public"
 
 # API Base Configuration
 NEXT_PUBLIC_API_URL="http://localhost:3001"
