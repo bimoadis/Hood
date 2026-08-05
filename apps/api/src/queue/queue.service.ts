@@ -221,6 +221,9 @@ export class QueueService {
         } else {
           aiResponse = `Hello ${xScreenName}! I'm ready for our next adventure!`;
         }
+        
+        // Append companion promo tagline
+        aiResponse += `\n\n🏹 Your companion awaits. Hatch, train, and level up at hoodfolk.tech`;
 
         // Save AI Response to CompanionMemory
         await this.prisma.companionMemory.create({

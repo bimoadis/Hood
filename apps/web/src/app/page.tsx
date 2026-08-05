@@ -461,14 +461,16 @@ export default function Home() {
             Hoodnest is the forest virtual pet platform on X — hatch a companion in Sherwood forest today, and train it to be a legendary Robin Hood protector using custom Pixel Art composites.
           </p>
           <div className="flex flex-wrap gap-4 mb-10">
-            <a
-              href="https://x.com/HoodNestfun"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#CCFF00] hover:bg-[#DFFF3D] hover:shadow-[0_0_24px_rgba(140,179,0,0.35)] text-black font-semibold text-sm px-7 py-3 rounded-full transition-all duration-200"
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new Event("open-onboarding"));
+                }
+              }}
+              className="bg-[#CCFF00] hover:bg-[#DFFF3D] hover:shadow-[0_0_24px_rgba(140,179,0,0.35)] text-black font-semibold text-sm px-7 py-3 rounded-full transition-all duration-200 focus:outline-none"
             >
               Hatch on 𝕏 →
-            </a>
+            </button>
             <Link
               href="/docs"
               className="bg-transparent border border-black/20 hover:border-[#4C6B00] hover:text-[#4C6B00] text-black font-semibold text-sm px-7 py-3 rounded-full transition-all duration-200 flex items-center"
@@ -879,14 +881,16 @@ export default function Home() {
             </p>
           </div>
           <div>
-            <a
-              href="https://x.com/HoodNestfun"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-black hover:bg-neutral-900 text-white font-semibold text-sm px-8 py-3.5 rounded-full transition-all duration-200 inline-block whitespace-nowrap"
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new Event("open-onboarding"));
+                }
+              }}
+              className="bg-black hover:bg-neutral-900 text-white font-semibold text-sm px-8 py-3.5 rounded-full transition-all duration-200 inline-block whitespace-nowrap focus:outline-none"
             >
               Hatch on 𝕏 →
-            </a>
+            </button>
           </div>
         </div>
       </section>
