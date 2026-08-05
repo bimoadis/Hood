@@ -159,7 +159,7 @@ export default function Header() {
                 <div className="text-5xl">🏆</div>
                 <h3 className="font-display font-extrabold text-2xl text-black">Step 4: Claim Airdrop</h3>
                 <p className="text-black/60 text-sm leading-relaxed max-w-xs">
-                  Raise your pet to enter the Top 3 Leaderboard and claim your share of the <span className="font-bold text-[#4C6B00]">10,000 $NEST</span> reward pool!
+                  Raise your pet to enter the Top 3 Leaderboard and claim your share of the <span className="font-bold text-[#4C6B00]">10,000 $FOLK</span> reward pool!
                 </p>
                 <div className="font-mono text-sm text-[#4C6B00] font-bold mt-1">
                   Time Remaining: {formatTime(timeLeft)}

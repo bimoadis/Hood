@@ -535,15 +535,15 @@ export default function Home() {
         {/* Right Column content */}
         <div className="max-w-md w-full justify-self-center md:justify-self-end flex flex-col gap-4">
 
-          {/* $NEST Airdrop Countdown Banner */}
+          {/* $FOLK Airdrop Countdown Banner */}
           <div className="bg-black text-white border border-[#CCFF00]/30 rounded-xl p-4 flex items-center justify-between shadow-md border-glow">
             <div className="flex flex-col">
               <span className="font-mono text-[9px] uppercase tracking-widest text-[#CCFF00] font-bold flex items-center gap-1.5 mb-1">
                 <span className="w-1.5 h-1.5 bg-[#CCFF00] rounded-full animate-pulse"></span>
-                $NEST Airdrop (Top 3)
+                $FOLK Airdrop (Top 3)
               </span>
               <span className="font-mono text-[10px] text-white/50 uppercase tracking-wider">
-                Reward: 10,000 $NEST
+                Reward: 10,000 $FOLK
               </span>
             </div>
             <div className="font-mono text-3xl font-extrabold tracking-tight text-[#CCFF00] animate-pulse">
