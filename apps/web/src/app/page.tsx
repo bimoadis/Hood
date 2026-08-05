@@ -189,6 +189,47 @@ export default function Home() {
   const [latestCards, setLatestCards] = useState<CardData[]>([]);
   const [topCompanions, setTopCompanions] = useState<TopCompanionData[]>([]);
   const [copied, setCopied] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<number>(10800);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    
+    const targetKey = "nest_airdrop_countdown_target";
+    let targetTime = localStorage.getItem(targetKey);
+    if (!targetTime) {
+      const newTarget = Date.now() + 3 * 60 * 60 * 1000;
+      localStorage.setItem(targetKey, newTarget.toString());
+      targetTime = newTarget.toString();
+    }
+    
+    const calculateTimeLeft = () => {
+      const now = Date.now();
+      const difference = parseInt(targetTime!) - now;
+      if (difference <= 0) {
+        return 0;
+      }
+      return Math.floor(difference / 1000);
+    };
+
+    setTimeLeft(calculateTimeLeft());
+
+    const interval = setInterval(() => {
+      const remaining = calculateTimeLeft();
+      setTimeLeft(remaining);
+      if (remaining <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const formatTime = (seconds: number) => {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
 
   const handleCopyCA = () => {
     navigator.clipboard.writeText("H763R1ZUTpQJKrbRfT6geyMswsbw7XSJxCeTDqg8pump");
@@ -491,42 +532,61 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Dynamic Stacking Card representation */}
-        <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm max-w-md w-full justify-self-center md:justify-self-end flex flex-col gap-3 relative">
-
-          {/* User email in the top right corner of the card */}
-          <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span>Hatching card</span>
-              {loading && <span className="text-[9px] animate-pulse text-black/40">fetching...</span>}
-              {error && <span className="text-[9px] text-red-500">offline</span>}
+        {/* Right Column content */}
+        <div className="max-w-md w-full justify-self-center md:justify-self-end flex flex-col gap-4">
+          
+          {/* $NEST Airdrop Countdown Banner */}
+          <div className="bg-black text-white border border-[#CCFF00]/30 rounded-xl p-4 flex items-center justify-between shadow-md border-glow">
+            <div className="flex flex-col">
+              <span className="font-mono text-[9px] uppercase tracking-widest text-[#CCFF00] font-bold flex items-center gap-1.5 mb-1">
+                <span className="w-1.5 h-1.5 bg-[#CCFF00] rounded-full animate-pulse"></span>
+                $NEST Airdrop (Top 3)
+              </span>
+              <span className="font-mono text-[10px] text-white/50 uppercase tracking-wider">
+                Reward: 10,000 $NEST
+              </span>
             </div>
-            <a
-              href={`https://x.com/${email.split("@")[0]}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#4C6B00]/10 text-[#4C6B00] hover:bg-[#4C6B00]/20 px-2 py-0.5 rounded text-[9px] font-bold tracking-normal transition-all duration-200"
-            >
-              @{email.split("@")[0]}
-            </a>
+            <div className="font-mono text-3xl font-extrabold tracking-tight text-[#CCFF00] animate-pulse">
+              {formatTime(timeLeft)}
+            </div>
           </div>
 
-          {activeCompanion ? (
-            <>
-              {/* Stacking Pixel Art composite view */}
-              <div className="relative w-full h-48">
-                <PixelPetRenderer
-                  companionName={activeCompanion.name}
-                  species={activeCompanion.species}
-                  evolutionLvl={activeCompanion.evolutionLvl}
-                  className="w-full h-full"
-                />
-                {isTop1 && (
-                  <span className="absolute top-2 left-2 bg-[#CCFF00] text-black text-xs font-mono font-bold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm border border-[#4C6B00]/25 select-none">
-                    🏆 TOP #1
-                  </span>
-                )}
+          {/* Dynamic Stacking Card representation */}
+          <div className="bg-white border border-black/10 rounded-xl p-5 border-glow shadow-sm w-full flex flex-col gap-3 relative">
+
+            {/* User email in the top right corner of the card */}
+            <div className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <span>Hatching card</span>
+                {loading && <span className="text-[9px] animate-pulse text-black/40">fetching...</span>}
+                {error && <span className="text-[9px] text-red-500">offline</span>}
               </div>
+              <a
+                href={`https://x.com/${email.split("@")[0]}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#4C6B00]/10 text-[#4C6B00] hover:bg-[#4C6B00]/20 px-2 py-0.5 rounded text-[9px] font-bold tracking-normal transition-all duration-200"
+              >
+                @{email.split("@")[0]}
+              </a>
+            </div>
+
+            {activeCompanion ? (
+              <>
+                {/* Stacking Pixel Art composite view */}
+                <div className="relative w-full h-48">
+                  <PixelPetRenderer
+                    companionName={activeCompanion.name}
+                    species={activeCompanion.species}
+                    evolutionLvl={activeCompanion.evolutionLvl}
+                    className="w-full h-full"
+                  />
+                  {isTop1 && (
+                    <span className="absolute top-2 left-2 bg-[#CCFF00] text-black text-xs font-mono font-bold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm border border-[#4C6B00]/25 select-none">
+                      🏆 TOP #1
+                    </span>
+                  )}
+                </div>
 
               {/* Companion Stats Grid below the image */}
               <div className="border-t border-black/5 pt-3 mt-1">
@@ -638,7 +698,8 @@ export default function Home() {
             </div>
           )}
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* CAPABILITIES */}
       <section className="max-w-6xl mx-auto px-6 py-16 border-t border-black/10">
