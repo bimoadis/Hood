@@ -189,7 +189,7 @@ export default function Home() {
   const [latestCards, setLatestCards] = useState<CardData[]>([]);
   const [topCompanions, setTopCompanions] = useState<TopCompanionData[]>([]);
   const [copied, setCopied] = useState(false);
-  const [timeLeft, setTimeLeft] = useState<number>(10800);
+  const [timeLeft, setTimeLeft] = useState<number>(86400);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -197,7 +197,7 @@ export default function Home() {
     const targetKey = "nest_airdrop_countdown_target";
     let targetTime = localStorage.getItem(targetKey);
     if (!targetTime) {
-      const newTarget = Date.now() + 3 * 60 * 60 * 1000;
+      const newTarget = Date.now() + 24 * 60 * 60 * 1000;
       localStorage.setItem(targetKey, newTarget.toString());
       targetTime = newTarget.toString();
     }
@@ -455,7 +455,7 @@ export default function Home() {
           </div>
           <h1 className="font-display font-bold text-5xl lg:text-6xl leading-[1.02] tracking-tight mb-5 text-black">
             Your companion,<br />
-            <span className="text-[#4C6B00]">running on Solana.</span>
+            <span className="text-[#4C6B00]">running on Robinhood Chain.</span>
           </h1>
           <p className="text-black/60 text-lg max-w-md mb-8 leading-relaxed">
             Hoodfolk is the forest virtual pet platform on X — hatch a companion in Sherwood forest today, and train it to be a legendary Robin Hood protector using custom Pixel Art composites.

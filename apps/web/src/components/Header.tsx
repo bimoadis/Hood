@@ -25,14 +25,14 @@ export default function Header() {
   };
 
   // We can synchronize time with localStorage countdown target if the user is on another page
-  const [timeLeft, setTimeLeft] = useState<number>(10800);
+  const [timeLeft, setTimeLeft] = useState<number>(86400);
   useEffect(() => {
     if (typeof window === "undefined" || !showOnboarding) return;
     
     const targetKey = "nest_airdrop_countdown_target";
     let targetTime = localStorage.getItem(targetKey);
     if (!targetTime) {
-      const newTarget = Date.now() + 3 * 60 * 60 * 1000;
+      const newTarget = Date.now() + 24 * 60 * 60 * 1000;
       localStorage.setItem(targetKey, newTarget.toString());
       targetTime = newTarget.toString();
     }
