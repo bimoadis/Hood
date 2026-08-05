@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CompanionService } from '../companion/companion.service';
 import { PrismaService } from 'database';
 import { CHARACTER_ROLES } from 'shared';
+import { TwitterService } from '../webhook/twitter.service';
 
 @Injectable()
 export class QueueService {
@@ -10,6 +11,7 @@ export class QueueService {
   constructor(
     private readonly companionService: CompanionService,
     private readonly prisma: PrismaService,
+    private readonly twitterService: TwitterService,
   ) {}
 
   async addEvent(event: any): Promise<void> {
@@ -235,6 +237,17 @@ export class QueueService {
         });
 
         console.log(`[QueueService] AI Response: "${aiResponse}" saved to CompanionMemory.`);
+
+        // Post Twitter/X Reply containing ONLY the promo tagline
+        const replyTweetId = item.event.id_str;
+        if (replyTweetId && replyTweetId !== 'test_companion') {
+          try {
+            const replyText = `🏹 Your companion awaits. Hatch, train, and level up at hoodfolk.tech`;
+            await this.twitterService.replyToTweet(replyText, replyTweetId);
+          } catch (err) {
+            console.error(`[QueueService] Error posting tweet reply back to Twitter:`, err);
+          }
+        }
       }
     }
   }

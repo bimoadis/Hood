@@ -9,9 +9,12 @@ import { R2Service } from '../r2/r2.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { QuestService } from '../quest/quest.service';
 
+import { TwitterService } from './twitter.service';
+
 @Module({
   providers: [
     WebhookService,
+    TwitterService,
     LockService,
     QueueService,
     CompanionService,
@@ -21,5 +24,6 @@ import { QuestService } from '../quest/quest.service';
     QuestService,
   ],
   controllers: [WebhookController],
+  exports: [TwitterService],
 })
 export class WebhookModule {}
