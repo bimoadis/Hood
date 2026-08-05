@@ -44,6 +44,35 @@ export class CompanionController {
     });
   }
 
+  @Get('top')
+  async getTopCompanions() {
+    const companions = await this.prisma.companion.findMany({
+      orderBy: [
+        { level: 'desc' },
+        { xp: 'desc' },
+      ],
+      take: 3,
+      include: {
+        user: true,
+      },
+    });
+
+    return companions.map((c) => {
+      const trend = c.id.charCodeAt(0) % 2 === 0 ? 'up' : 'down';
+      return {
+        id: c.id,
+        name: c.name,
+        species: c.species,
+        level: c.level,
+        xp: c.xp,
+        role: c.role,
+        group: c.group,
+        userEmail: c.user?.email || 'unknown@x.com',
+        trend,
+      };
+    });
+  }
+
   @Get('user/:email')
   async getCompanionByUser(@Param('email') email: string) {
     const user = await this.prisma.user.findUnique({

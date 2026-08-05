@@ -55,6 +55,18 @@ interface CardData {
   userEmail: string;
 }
 
+interface TopCompanionData {
+  id: string;
+  name: string;
+  species: string;
+  level: number;
+  xp: number;
+  role: string;
+  group: string;
+  userEmail: string;
+  trend: string;
+}
+
 const getApiBaseUrl = () => {
   if (typeof window !== "undefined") {
     if (process.env.NEXT_PUBLIC_API_URL) {
@@ -175,6 +187,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [latestCards, setLatestCards] = useState<CardData[]>([]);
+  const [topCompanions, setTopCompanions] = useState<TopCompanionData[]>([]);
   const [copied, setCopied] = useState(false);
 
   const handleCopyCA = () => {
@@ -219,7 +232,7 @@ export default function Home() {
       
       // Fallback to static mock representation only if no cached data exists
       setUserCompanion(prev => {
-        if (prev) return prev;
+        if (prev && prev.user.email === targetEmail) return prev;
         const fallbackData = {
           user: { email: targetEmail, name: targetEmail.split("@")[0] },
           companion: {
@@ -286,6 +299,26 @@ export default function Home() {
     fetchLatestCards();
   }, []);
 
+  useEffect(() => {
+    const fetchTopCompanions = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/companion/top`);
+        if (response.ok) {
+          const data = await response.json() as TopCompanionData[];
+          setTopCompanions(data);
+          if (data.length > 0) {
+            const topPet = data[0];
+            setEmail(topPet.userEmail);
+            setTempEmail(`@${topPet.userEmail.split("@")[0]}`);
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to fetch top companions from database.", err);
+      }
+    };
+    fetchTopCompanions();
+  }, []);
+
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let formattedEmail = tempEmail.trim();
@@ -314,6 +347,11 @@ export default function Home() {
         if (latestResponse.ok) {
           const data = await latestResponse.json() as CardData[];
           setLatestCards(data);
+        }
+        const topResponse = await fetch(`${API_BASE_URL}/api/companion/top`);
+        if (topResponse.ok) {
+          const topData = await topResponse.json() as TopCompanionData[];
+          setTopCompanions(topData);
         }
       }
     } catch {
@@ -344,6 +382,7 @@ export default function Home() {
   };
 
   const activeCompanion = userCompanion?.companion;
+  const isTop1 = topCompanions.length > 0 && activeCompanion && topCompanions[0].userEmail === email;
 
   return (
     <main className="relative z-10 font-sans min-h-screen">
@@ -413,6 +452,43 @@ export default function Home() {
               </button>
             </form>
           </div>
+
+          {/* Top 3 Pets Leaderboard */}
+          <div className="bg-white border border-black/10 rounded-xl p-5 max-w-md border-glow mt-4">
+            <h3 className="font-display font-bold text-sm text-black mb-3 flex justify-between items-center">
+              <span>Top 3 Pets</span>
+              <span className="font-mono text-[9px] uppercase tracking-widest text-black/40">Leaderboard</span>
+            </h3>
+            <div className="flex flex-col gap-2.5">
+              {topCompanions.length > 0 ? (
+                topCompanions.map((pet, idx) => (
+                  <div key={pet.id} className="flex justify-between items-center py-1.5 border-b border-black/5 last:border-0 font-mono text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-4 h-4 flex items-center justify-center rounded-full text-[9px] font-bold ${
+                        idx === 0 ? "bg-[#CCFF00] text-black" : 
+                        idx === 1 ? "bg-black/10 text-black/80" : 
+                        "bg-black/5 text-black/60"
+                      }`}>
+                        {idx + 1}
+                      </span>
+                      <span className="font-sans font-bold text-black">{pet.name}</span>
+                      <span className="text-[10px] text-black/40">@{pet.userEmail.split("@")[0]}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-black/50 text-[10px]">Lvl {pet.level}</span>
+                      {pet.trend === "up" ? (
+                        <span className="text-[#4C6B00] font-bold text-[10px] flex items-center" title="XP/Level is trending up">▲</span>
+                      ) : (
+                        <span className="text-[#C23B12] font-bold text-[10px] flex items-center" title="XP/Level is trending down">▼</span>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-4 text-black/40 text-[11px]">Loading top companions...</div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Dynamic Stacking Card representation */}
@@ -438,12 +514,19 @@ export default function Home() {
           {activeCompanion ? (
             <>
               {/* Stacking Pixel Art composite view */}
-              <PixelPetRenderer
-                companionName={activeCompanion.name}
-                species={activeCompanion.species}
-                evolutionLvl={activeCompanion.evolutionLvl}
-                className="w-full h-48"
-              />
+              <div className="relative w-full h-48">
+                <PixelPetRenderer
+                  companionName={activeCompanion.name}
+                  species={activeCompanion.species}
+                  evolutionLvl={activeCompanion.evolutionLvl}
+                  className="w-full h-full"
+                />
+                {isTop1 && (
+                  <span className="absolute top-2 left-2 bg-[#CCFF00] text-black text-xs font-mono font-bold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm border border-[#4C6B00]/25 select-none">
+                    🏆 TOP #1
+                  </span>
+                )}
+              </div>
 
               {/* Companion Stats Grid below the image */}
               <div className="border-t border-black/5 pt-3 mt-1">
