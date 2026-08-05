@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Hoodfolk — Your pixel companion, running on Robinhood Chain",
-  description: "An immersive virtual pet and RPG simulation set in the medieval Robin Hood universe, launched on pump.fun, raised in public on X.",
+  description: "An immersive virtual pet and RPG simulation set in the medieval Robin Hood universe, launched on Robinhood Chain, raised in public on X.",
 };
 
 export default function RootLayout({
@@ -41,13 +41,13 @@ export default function RootLayout({
           <div className="ticker">
             <span>HOODFOLK DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
             <span>CHAIN <span className="tk-up">▲ ROBINHOOD</span></span>
-            <span>LAUNCH <span className="tk-up">▲ PUMP.FUN</span></span>
+            <span>LAUNCH <span className="tk-up">▲ ROBINHOOD</span></span>
             <span>MINT PRICE <span className="tk-up">▲ $0.00</span></span>
             <span>FEED COOLDOWN <span className="tk-down">▼ 60:00</span></span>
             <span>NETWORK <span className="tk-up">▲ 𝕏 · LIVE</span></span>
             <span>HOODFOLK DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
             <span>CHAIN <span className="tk-up">▲ ROBINHOOD</span></span>
-            <span>LAUNCH <span className="tk-up">▲ PUMP.FUN</span></span>
+            <span>LAUNCH <span className="tk-up">▲ ROBINHOOD</span></span>
             <span>FEED COOLDOWN <span className="tk-down">▼ 60:00</span></span>
             <span>NETWORK <span className="tk-up">▲ 𝕏 · LIVE</span></span>
           </div>
