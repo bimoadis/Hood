@@ -191,7 +191,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
 
   const handleCopyCA = () => {
-    navigator.clipboard.writeText("7RsgazLLdQu7YsqtydJ6NzbnMKKfSCZkwgmzEiYDpump");
+    navigator.clipboard.writeText("H763R1ZUTpQJKrbRfT6geyMswsbw7XSJxCeTDqg8pump");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
