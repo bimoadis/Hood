@@ -30,25 +30,28 @@ export default function Header() {
     if (typeof window === "undefined" || !showOnboarding) return;
     
     const targetKey = "nest_airdrop_countdown_target";
-    let targetTime = localStorage.getItem(targetKey);
-    if (!targetTime) {
-      const newTarget = Date.now() + 24 * 60 * 60 * 1000;
-      localStorage.setItem(targetKey, newTarget.toString());
-      targetTime = newTarget.toString();
-    }
+    
+    const getOrSetTarget = () => {
+      let targetTime = localStorage.getItem(targetKey);
+      if (!targetTime || parseInt(targetTime) <= Date.now()) {
+        const newTarget = Date.now() + 24 * 60 * 60 * 1000;
+        localStorage.setItem(targetKey, newTarget.toString());
+        targetTime = newTarget.toString();
+      }
+      return parseInt(targetTime);
+    };
     
     const calculateTimeLeft = () => {
+      const target = getOrSetTarget();
       const now = Date.now();
-      const difference = parseInt(targetTime!) - now;
+      const difference = target - now;
       if (difference <= 0) return 0;
       return Math.floor(difference / 1000);
     };
 
     setTimeLeft(calculateTimeLeft());
     const interval = setInterval(() => {
-      const remaining = calculateTimeLeft();
-      setTimeLeft(remaining);
-      if (remaining <= 0) clearInterval(interval);
+      setTimeLeft(calculateTimeLeft());
     }, 1000);
 
     return () => clearInterval(interval);
