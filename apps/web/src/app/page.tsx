@@ -188,14 +188,14 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [latestCards, setLatestCards] = useState<CardData[]>([]);
   const [topCompanions, setTopCompanions] = useState<TopCompanionData[]>([]);
-  const [copied, setCopied] = useState(false);
+  // const [copied, setCopied] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number>(86400);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     const targetKey = "nest_airdrop_countdown_target";
-    
+
     const getOrSetTarget = () => {
       let targetTime = localStorage.getItem(targetKey);
       if (!targetTime || parseInt(targetTime) <= Date.now()) {
@@ -205,7 +205,7 @@ export default function Home() {
       }
       return parseInt(targetTime);
     };
-    
+
     const calculateTimeLeft = () => {
       const target = getOrSetTarget();
       const now = Date.now();
@@ -230,11 +230,11 @@ export default function Home() {
     return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const handleCopyCA = () => {
-    navigator.clipboard.writeText("Coming Soon");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  // const handleCopyCA = () => {
+  //   navigator.clipboard.writeText("Coming Soon");
+  //   setCopied(true);
+  //   setTimeout(() => setCopied(false), 2000);
+  // };
 
   const fetchCompanionData = useCallback(async (targetEmail: string) => {
     // Try to load cached data first for instant loading
@@ -269,7 +269,7 @@ export default function Home() {
       const errMsg = err instanceof Error ? err.message : "Failed to fetch";
       console.warn("Failed to fetch from backend API. Using local mock fallback.", errMsg);
       setError(errMsg);
-      
+
       // Fallback to static mock representation only if no cached data exists
       setUserCompanion(prev => {
         if (prev && prev.user.email === targetEmail) return prev;
@@ -434,7 +434,7 @@ export default function Home() {
               <span className="live-dot"></span> Live on 𝕏 · systems normal
             </span>
             <span className="text-black/20 font-mono text-xs">•</span>
-            <button 
+            {/* <button 
               onClick={handleCopyCA}
               className="group flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#4C6B00] bg-[#4C6B00]/8 border border-[#4C6B00]/25 px-2.5 py-0.5 rounded-full transition-all duration-200 hover:bg-[#4C6B00]/15 hover:border-[#4C6B00]/40 focus:outline-none"
               title="Click to copy CA"
@@ -450,7 +450,7 @@ export default function Home() {
                   <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                 </svg>
               )}
-            </button>
+            </button> */}
           </div>
           <h1 className="font-display font-bold text-5xl lg:text-6xl leading-[1.02] tracking-tight mb-5 text-black">
             Your companion,<br />
@@ -506,11 +506,10 @@ export default function Home() {
                 topCompanions.map((pet, idx) => (
                   <div key={pet.id} className="flex justify-between items-center py-1.5 border-b border-black/5 last:border-0 font-mono text-xs">
                     <div className="flex items-center gap-2">
-                      <span className={`w-4 h-4 flex items-center justify-center rounded-full text-[9px] font-bold ${
-                        idx === 0 ? "bg-[#CCFF00] text-black" : 
-                        idx === 1 ? "bg-black/10 text-black/80" : 
-                        "bg-black/5 text-black/60"
-                      }`}>
+                      <span className={`w-4 h-4 flex items-center justify-center rounded-full text-[9px] font-bold ${idx === 0 ? "bg-[#CCFF00] text-black" :
+                        idx === 1 ? "bg-black/10 text-black/80" :
+                          "bg-black/5 text-black/60"
+                        }`}>
                         {idx + 1}
                       </span>
                       <span className="font-sans font-bold text-black">{pet.name}</span>
@@ -535,7 +534,7 @@ export default function Home() {
 
         {/* Right Column content */}
         <div className="max-w-md w-full justify-self-center md:justify-self-end flex flex-col gap-4">
-          
+
           {/* $NEST Airdrop Countdown Banner */}
           <div className="bg-black text-white border border-[#CCFF00]/30 rounded-xl p-4 flex items-center justify-between shadow-md border-glow">
             <div className="flex flex-col">
@@ -589,118 +588,118 @@ export default function Home() {
                   )}
                 </div>
 
-              {/* Companion Stats Grid below the image */}
-              <div className="border-t border-black/5 pt-3 mt-1">
-                <div className="flex justify-between items-center mb-1">
-                  <h3 className="font-display font-bold text-lg text-black">
-                    {activeCompanion.name} <span className="text-xs text-black/50 font-normal">({activeCompanion.species})</span>
-                  </h3>
-                  <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2.5 py-0.5 text-[10px] font-mono rounded-full uppercase tracking-wider">
-                    Level {activeCompanion.level}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="bg-[#4C6B00]/10 text-[#4C6B00] border border-[#4C6B00]/20 px-2 py-0.5 text-[9px] font-bold rounded uppercase tracking-wider">
-                    {activeCompanion.role || getCompanionRoleInfo(activeCompanion).role}
-                  </span>
-                  <span className="text-[10px] text-black/40 font-mono">
-                    {activeCompanion.group || getCompanionRoleInfo(activeCompanion).group}
-                  </span>
-                </div>
-                <div className="flex flex-col mb-3">
-                  <div className="flex justify-between font-mono text-[10px] text-black/40">
-                    <span>EXP : {activeCompanion.xp}</span>
-                    <span>100</span>
+                {/* Companion Stats Grid below the image */}
+                <div className="border-t border-black/5 pt-3 mt-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className="font-display font-bold text-lg text-black">
+                      {activeCompanion.name} <span className="text-xs text-black/50 font-normal">({activeCompanion.species})</span>
+                    </h3>
+                    <span className="border border-[#4C6B00]/30 bg-[#4C6B00]/10 text-[#4C6B00] px-2.5 py-0.5 text-[10px] font-mono rounded-full uppercase tracking-wider">
+                      Level {activeCompanion.level}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
-                      <div className="bg-indigo-500 h-full transition-all duration-300" style={{ width: `${Math.min(100, activeCompanion.xp)}%` }}></div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="bg-[#4C6B00]/10 text-[#4C6B00] border border-[#4C6B00]/20 px-2 py-0.5 text-[9px] font-bold rounded uppercase tracking-wider">
+                      {activeCompanion.role || getCompanionRoleInfo(activeCompanion).role}
+                    </span>
+                    <span className="text-[10px] text-black/40 font-mono">
+                      {activeCompanion.group || getCompanionRoleInfo(activeCompanion).group}
+                    </span>
+                  </div>
+                  <div className="flex flex-col mb-3">
+                    <div className="flex justify-between font-mono text-[10px] text-black/40">
+                      <span>EXP : {activeCompanion.xp}</span>
+                      <span>100</span>
                     </div>
-                  </div>
-                </div>
-
-                {/* Vitals */}
-                <div className="grid grid-cols-2 gap-3 text-xs font-mono text-black/70">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-black/40">❤️ Health</span>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mt-1">
                       <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
-                        <div className="bg-red-500 h-full" style={{ width: `${activeCompanion.health}%` }}></div>
+                        <div className="bg-indigo-500 h-full transition-all duration-300" style={{ width: `${Math.min(100, activeCompanion.xp)}%` }}></div>
                       </div>
-                      <span className="text-[10px]">{activeCompanion.health}/100</span>
                     </div>
                   </div>
 
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-black/40">⚡ Energy</span>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
-                        <div className="bg-yellow-500 h-full" style={{ width: `${activeCompanion.energy}%` }}></div>
+                  {/* Vitals */}
+                  <div className="grid grid-cols-2 gap-3 text-xs font-mono text-black/70">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-black/40">❤️ Health</span>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
+                          <div className="bg-red-500 h-full" style={{ width: `${activeCompanion.health}%` }}></div>
+                        </div>
+                        <span className="text-[10px]">{activeCompanion.health}/100</span>
                       </div>
-                      <span className="text-[10px]">{activeCompanion.energy}/100</span>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-black/40">⚡ Energy</span>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
+                          <div className="bg-yellow-500 h-full" style={{ width: `${activeCompanion.energy}%` }}></div>
+                        </div>
+                        <span className="text-[10px]">{activeCompanion.energy}/100</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-black/40">🍖 Hunger</span>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
+                          <div className="bg-orange-500 h-full" style={{ width: `${activeCompanion.hunger}%` }}></div>
+                        </div>
+                        <span className="text-[10px]">{activeCompanion.hunger}/100</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-black/40">😊 Happiness</span>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
+                          <div className="bg-green-500 h-full" style={{ width: `${activeCompanion.happiness}%` }}></div>
+                        </div>
+                        <span className="text-[10px]">{activeCompanion.happiness}/100</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-black/40">🍖 Hunger</span>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
-                        <div className="bg-orange-500 h-full" style={{ width: `${activeCompanion.hunger}%` }}></div>
-                      </div>
-                      <span className="text-[10px]">{activeCompanion.hunger}/100</span>
+                  <div className="grid grid-cols-2 gap-3 text-xs font-mono text-black/70 mt-3 pt-3 border-t border-black/5">
+                    <div className="flex justify-between">
+                      <span className="text-black/40 text-[10px]">🤝 Friendship</span>
+                      <span className="font-bold">{activeCompanion.friendship}/100</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/40 text-[10px]">⚔️ Strength</span>
+                      <span className="font-bold">{activeCompanion.strength || 10}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/40 text-[10px]">🧠 Intelligence</span>
+                      <span className="font-bold">{activeCompanion.intelligence || 10}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/40 text-[10px]">🍀 Luck</span>
+                      <span className="font-bold">{activeCompanion.luck || 10}</span>
                     </div>
                   </div>
 
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-black/40">😊 Happiness</span>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-black/5 rounded-full h-1.5 overflow-hidden">
-                        <div className="bg-green-500 h-full" style={{ width: `${activeCompanion.happiness}%` }}></div>
-                      </div>
-                      <span className="text-[10px]">{activeCompanion.happiness}/100</span>
-                    </div>
+                  <div className="mt-3 pt-3 border-t border-black/5 text-xs text-black/60 font-mono italic leading-relaxed">
+                    {activeCompanion.description || getCompanionRoleInfo(activeCompanion).description}
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-3 text-xs font-mono text-black/70 mt-3 pt-3 border-t border-black/5">
-                  <div className="flex justify-between">
-                    <span className="text-black/40 text-[10px]">🤝 Friendship</span>
-                    <span className="font-bold">{activeCompanion.friendship}/100</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-black/40 text-[10px]">⚔️ Strength</span>
-                    <span className="font-bold">{activeCompanion.strength || 10}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-black/40 text-[10px]">🧠 Intelligence</span>
-                    <span className="font-bold">{activeCompanion.intelligence || 10}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-black/40 text-[10px]">🍀 Luck</span>
-                    <span className="font-bold">{activeCompanion.luck || 10}</span>
-                  </div>
-                </div>
-
-                <div className="mt-3 pt-3 border-t border-black/5 text-xs text-black/60 font-mono italic leading-relaxed">
-                  {activeCompanion.description || getCompanionRoleInfo(activeCompanion).description}
-                </div>
+              </>
+            ) : (
+              <div className="py-12 text-center">
+                <span className="text-3xl">🥚</span>
+                <p className="text-sm font-semibold text-black/70 mt-3">No companion hatched yet for this user.</p>
+                <button
+                  onClick={handleHatchMock}
+                  className="mt-4 bg-[#CCFF00] hover:bg-[#DFFF3D] text-black font-semibold text-xs px-4 py-2 rounded-lg transition"
+                >
+                  Hatch Mock Companion
+                </button>
               </div>
-            </>
-          ) : (
-            <div className="py-12 text-center">
-              <span className="text-3xl">🥚</span>
-              <p className="text-sm font-semibold text-black/70 mt-3">No companion hatched yet for this user.</p>
-              <button
-                onClick={handleHatchMock}
-                className="mt-4 bg-[#CCFF00] hover:bg-[#DFFF3D] text-black font-semibold text-xs px-4 py-2 rounded-lg transition"
-              >
-                Hatch Mock Companion
-              </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
       {/* CAPABILITIES */}
       <section className="max-w-6xl mx-auto px-6 py-16 border-t border-black/10">
