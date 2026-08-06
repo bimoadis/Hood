@@ -60,6 +60,9 @@ model Companion {
   intelligence Int               @default(10)
   luck         Int               @default(10)
   friendship   Int               @default(0)
+  
+  lastFedAt    DateTime          @default(now())
+  lastTickedAt DateTime          @default(now())
 
   memories     CompanionMemory[]
   inventory    Inventory[]

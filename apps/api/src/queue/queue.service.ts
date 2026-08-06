@@ -3,6 +3,7 @@ import { CompanionService } from '../companion/companion.service';
 import { PrismaService } from 'database';
 import { CHARACTER_ROLES } from 'shared';
 import { TwitterService } from '../webhook/twitter.service';
+import { calculateDecay } from '../companion/decay.util';
 
 @Injectable()
 export class QueueService {
@@ -32,7 +33,16 @@ export class QueueService {
         const xScreenName = user.screen_name || 'mock_user';
 
         // Auto-hatch/retrieve a companion for the user on their first interaction
-        const companion = await this.companionService.hatchCompanion(xUserId, xScreenName);
+        let companion = await this.companionService.hatchCompanion(xUserId, xScreenName);
+
+        // Pre-action decay tick check
+        const decayUpdate = calculateDecay(companion, new Date());
+        if (decayUpdate) {
+          companion = await this.prisma.companion.update({
+            where: { id: companion.id },
+            data: decayUpdate,
+          });
+        }
 
         // Save incoming reply/tweet interaction into CompanionMemory
         if (item.event.text) {
@@ -66,18 +76,42 @@ export class QueueService {
         let hungerChange = 0;
         let healthChange = 0;
         let happinessChange = 0;
+        let feedCooldownActive = false;
+        let lastFedAtUpdate = companion.lastFedAt;
+
         const isFeedCommand = text.includes('feed') || text.includes('makan');
         if (isFeedCommand) {
-          hungerChange = -25;
-          healthChange = 2;
-          happinessChange = 5;
+          const now = new Date();
+          const lastFed = new Date(companion.lastFedAt || companion.createdAt);
+          const diffMinutes = (now.getTime() - lastFed.getTime()) / (1000 * 60);
+
+          if (diffMinutes < 60) {
+            feedCooldownActive = true;
+          } else {
+            lastFedAtUpdate = now;
+            // Check food size/type
+            const isHeavy = /ramen|feast|meal|pizza|burger|gyoza/i.test(text);
+            const isLight = /snack|cookie|strawberry|apple|candy|bread/i.test(text);
+            
+            if (isHeavy) {
+              hungerChange = -companion.hunger; // resets hunger to 0
+              healthChange = 10;
+              happinessChange = 15;
+            } else if (isLight) {
+              hungerChange = -25;
+              healthChange = 2;
+              happinessChange = 5;
+            } else {
+              // Default feed
+              hungerChange = -50;
+              healthChange = 5;
+              happinessChange = 10;
+            }
+          }
         }
 
-        // Natural hunger decay per interaction
-        const naturalHungerIncrease = 10;
-
         // Apply new vitals changes, clamped between 0 and 100
-        let newHunger = Math.min(100, Math.max(0, companion.hunger + hungerChange + naturalHungerIncrease));
+        let newHunger = feedCooldownActive ? companion.hunger : Math.min(100, Math.max(0, companion.hunger + hungerChange));
         let newHappiness = Math.min(100, Math.max(0, companion.happiness + happinessGained + happinessChange));
         let newFriendship = Math.min(100, Math.max(0, companion.friendship + friendshipGained));
         let newHealth = Math.min(100, Math.max(0, companion.health + healthChange));
@@ -120,7 +154,7 @@ export class QueueService {
         }
 
         newHealth = Math.min(100, newHealth + healthIncrement);
-        let newEnergy = Math.min(100, Math.max(0, companion.energy - 10 + energyIncrement)); // Deduct 10 energy per interaction
+        let newEnergy = Math.min(100, Math.max(0, companion.energy - 5 + energyIncrement)); // Deduct 5 energy per interaction
 
         // Roll a random mood for the companion
         const moods = ['Happy', 'Excited', 'Calm', 'Tired', 'Starving', 'Energetic', 'Sick', 'Playful', 'Serious'];
@@ -205,12 +239,16 @@ export class QueueService {
             energy: newEnergy,
             mood: rolledMood,
             description: dynamicDescription,
+            lastFedAt: lastFedAtUpdate,
+            lastTickedAt: new Date(),
           },
         });
 
         // AI Response Generation based on stats
         let aiResponse = '';
-        if (updatedCompanion.health === 0) {
+        if (feedCooldownActive) {
+          aiResponse = `*burp* I'm still full! Please wait a bit before feeding me again.`;
+        } else if (updatedCompanion.health === 0) {
           aiResponse = `*Cough* I feel so sick... I cannot gain any EXP until I'm healed...`;
         } else if (updatedCompanion.hunger > 80) {
           aiResponse = `I'm starving! Can you please feed me some food? *stomach growls*`;

@@ -56,29 +56,62 @@ export class AdventureService {
       });
     }
 
-    // 2. Roll narrative logic based on stats & personalities
+    // 2. Determine encounter type
+    const encounterTypes = ['Combat', 'Stealth', 'Riddles'];
+    const chosenEncounter = encounterTypes[Math.floor(Math.random() * encounterTypes.length)];
+
+    // 3. Roll narrative logic based on stats & personalities
     const results = companions.map(c => {
       let roll = Math.floor(Math.random() * 20) + 1; // Base D20
-      let statModifier = Math.floor((c.strength - 10) / 2);
+      let statModifier = 0;
       let personalityMod = 0;
-      
-      if (c.personality === 'Brave') personalityMod = 4;
-      if (c.personality === 'Wise') personalityMod = 3;
-      if (c.personality === 'Curious') personalityMod = 2;
-      if (c.personality === 'Lazy') personalityMod = -3;
+      let targetDifficulty = 12;
+
+      if (chosenEncounter === 'Combat') {
+        statModifier = Math.floor((c.strength - 10) / 2);
+        if (c.personality === 'Brave') personalityMod = 4;
+        if (c.personality === 'Wise') personalityMod = -2;
+        if (c.personality === 'Curious') {
+          personalityMod = 0;
+          targetDifficulty += 2; // curious increases danger difficulty
+        }
+        if (c.personality === 'Lazy') personalityMod = -3;
+      } else if (chosenEncounter === 'Stealth') {
+        statModifier = Math.floor((c.luck - 10) / 2);
+        if (c.personality === 'Brave') personalityMod = -2;
+        if (c.personality === 'Curious') personalityMod = 3;
+        if (c.personality === 'Lazy') personalityMod = -3;
+      } else { // Riddles
+        statModifier = Math.floor((c.intelligence - 10) / 2);
+        if (c.personality === 'Wise') personalityMod = 4;
+        if (c.personality === 'Curious') personalityMod = 2;
+        if (c.personality === 'Lazy') personalityMod = -3;
+      }
 
       const totalRoll = roll + statModifier + personalityMod;
-      return { companion: c, totalRoll };
+      return { companion: c, totalRoll, targetDifficulty };
     });
 
     // Determine outcome narrative
-    const success = results.some(r => r.totalRoll >= 12);
+    const success = results.some(r => r.totalRoll >= r.targetDifficulty);
     let logText = '';
     
     if (success) {
-      logText = `The expedition was a success! ${companions.map(c => c.name).join(' and ')} combined their skills to defeat a band of woodland bandits and discover treasure.`;
+      if (chosenEncounter === 'Combat') {
+        logText = `The expedition was a combat success! ${companions.map(c => c.name).join(' and ')} combined their strength to defeat a band of woodland bandits.`;
+      } else if (chosenEncounter === 'Stealth') {
+        logText = `The expedition was a stealth success! ${companions.map(c => c.name).join(' and ')} successfully sneaked past the sheriff's guards to retrieve the map.`;
+      } else {
+        logText = `The expedition was a wisdom success! ${companions.map(c => c.name).join(' and ')} solved Olliver's riddles to unlock the secret path.`;
+      }
     } else {
-      logText = `The expedition ended in failure. ${companions.map(c => c.name).join(' and ')} fell into a trap and lost their way in the misty Sherwood forest.`;
+      if (chosenEncounter === 'Combat') {
+        logText = `The combat expedition ended in failure. ${companions.map(c => c.name).join(' and ')} were overwhelmed by the bandits.`;
+      } else if (chosenEncounter === 'Stealth') {
+        logText = `The stealth expedition failed. ${companions.map(c => c.name).join(' and ')} stepped on crunchy twigs and were spotted by guards.`;
+      } else {
+        logText = `The expedition failed. ${companions.map(c => c.name).join(' and ')} failed to answer the riddle and got lost.`;
+      }
     }
 
     console.log(`[Adventure Outcome] Log: ${logText}`);

@@ -2,11 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { QueueService } from './queue.service';
 import { CompanionService } from '../companion/companion.service';
 import { PrismaService } from 'database';
+import { TwitterService } from '../webhook/twitter.service';
 
 describe('QueueService', () => {
   let queueService: QueueService;
   let mockCompanionService: any;
   let mockPrismaService: any;
+  let mockTwitterService: any;
 
   beforeEach(async () => {
     mockCompanionService = {
@@ -20,12 +22,16 @@ describe('QueueService', () => {
         update: jest.fn(),
       },
     };
+    mockTwitterService = {
+      replyToTweet: jest.fn(),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         QueueService,
         { provide: CompanionService, useValue: mockCompanionService },
         { provide: PrismaService, useValue: mockPrismaService },
+        { provide: TwitterService, useValue: mockTwitterService },
       ],
     }).compile();
 
@@ -49,14 +55,18 @@ describe('QueueService', () => {
       intelligence: 10,
       luck: 10,
       mood: 'Happy',
+      lastFedAt: new Date(),
+      lastTickedAt: new Date(),
+      updatedAt: new Date(),
+      createdAt: new Date(),
     };
     mockCompanionService.hatchCompanion.mockResolvedValue(companionMock);
     mockPrismaService.companion.update.mockResolvedValue({
       ...companionMock,
       xp: 15,
       friendship: 1,
-      energy: 90,
-      hunger: 10,
+      energy: 95,
+      hunger: 0,
     });
 
     await queueService.addEvent({
@@ -92,6 +102,10 @@ describe('QueueService', () => {
       intelligence: 10,
       luck: 10,
       mood: 'Happy',
+      lastFedAt: new Date(),
+      lastTickedAt: new Date(),
+      updatedAt: new Date(),
+      createdAt: new Date(),
     };
     mockCompanionService.hatchCompanion.mockResolvedValue(companionMock);
     mockPrismaService.companion.update.mockResolvedValue({
