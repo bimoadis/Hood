@@ -14,6 +14,7 @@ const auth_config_1 = require("./auth/auth.config");
 const lock_service_1 = require("./lock/lock.service");
 const queue_service_1 = require("./queue/queue.service");
 const companion_service_1 = require("./companion/companion.service");
+const scheduler_service_1 = require("./companion/scheduler.service");
 const adventure_service_1 = require("./adventure/adventure.service");
 const r2_service_1 = require("./r2/r2.service");
 const inventory_service_1 = require("./inventory/inventory.service");
@@ -31,6 +32,7 @@ exports.AppModule = AppModule = __decorate([
             lock_service_1.LockService,
             queue_service_1.QueueService,
             companion_service_1.CompanionService,
+            scheduler_service_1.SchedulerService,
             adventure_service_1.AdventureService,
             r2_service_1.R2Service,
             inventory_service_1.InventoryService,
@@ -41,6 +43,7 @@ exports.AppModule = AppModule = __decorate([
             lock_service_1.LockService,
             queue_service_1.QueueService,
             companion_service_1.CompanionService,
+            scheduler_service_1.SchedulerService,
             adventure_service_1.AdventureService,
             r2_service_1.R2Service,
             inventory_service_1.InventoryService,

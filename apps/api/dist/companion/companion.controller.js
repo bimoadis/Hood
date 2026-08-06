@@ -24,7 +24,6 @@ let CompanionController = class CompanionController {
     async getLatestCompanions() {
         const companions = await this.prisma.companion.findMany({
             orderBy: { createdAt: 'desc' },
-            take: 4,
             include: {
                 user: true,
             },
@@ -43,9 +42,40 @@ let CompanionController = class CompanionController {
                 happiness: c.happiness,
                 friendship: c.friendship,
                 strength: c.strength,
+                intelligence: c.intelligence,
+                luck: c.luck,
+                role: c.role,
+                group: c.group,
+                description: c.description,
                 mood: c.mood,
                 cardNumber: `#0${417 + index}`,
                 userEmail: c.user?.email || 'unknown@x.com',
+            };
+        });
+    }
+    async getTopCompanions() {
+        const companions = await this.prisma.companion.findMany({
+            orderBy: [
+                { level: 'desc' },
+                { xp: 'desc' },
+            ],
+            take: 3,
+            include: {
+                user: true,
+            },
+        });
+        return companions.map((c) => {
+            const trend = c.id.charCodeAt(0) % 2 === 0 ? 'up' : 'down';
+            return {
+                id: c.id,
+                name: c.name,
+                species: c.species,
+                level: c.level,
+                xp: c.xp,
+                role: c.role,
+                group: c.group,
+                userEmail: c.user?.email || 'unknown@x.com',
+                trend,
             };
         });
     }
@@ -90,6 +120,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], CompanionController.prototype, "getLatestCompanions", null);
+__decorate([
+    (0, common_1.Get)('top'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CompanionController.prototype, "getTopCompanions", null);
 __decorate([
     (0, common_1.Get)('user/:email'),
     __param(0, (0, common_1.Param)('email')),

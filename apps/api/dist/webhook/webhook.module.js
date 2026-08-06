@@ -17,6 +17,7 @@ const adventure_service_1 = require("../adventure/adventure.service");
 const r2_service_1 = require("../r2/r2.service");
 const inventory_service_1 = require("../inventory/inventory.service");
 const quest_service_1 = require("../quest/quest.service");
+const twitter_service_1 = require("./twitter.service");
 let WebhookModule = class WebhookModule {
 };
 exports.WebhookModule = WebhookModule;
@@ -24,6 +25,7 @@ exports.WebhookModule = WebhookModule = __decorate([
     (0, common_1.Module)({
         providers: [
             webhook_service_1.WebhookService,
+            twitter_service_1.TwitterService,
             lock_service_1.LockService,
             queue_service_1.QueueService,
             companion_service_1.CompanionService,
@@ -33,6 +35,7 @@ exports.WebhookModule = WebhookModule = __decorate([
             quest_service_1.QuestService,
         ],
         controllers: [webhook_controller_1.WebhookController],
+        exports: [twitter_service_1.TwitterService],
     })
 ], WebhookModule);
 //# sourceMappingURL=webhook.module.js.map

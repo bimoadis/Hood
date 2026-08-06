@@ -3,13 +3,16 @@ export declare class CompanionService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     hatchCompanion(xUserId: string, xScreenName: string, name?: string): Promise<{
-        level: number;
+        name: string;
         id: string;
         userId: string;
-        name: string;
         species: string;
         personality: string;
+        role: string;
+        group: string;
+        description: string;
         evolutionLvl: number;
+        level: number;
         xp: number;
         mood: string;
         energy: number;
@@ -20,6 +23,8 @@ export declare class CompanionService {
         intelligence: number;
         luck: number;
         friendship: number;
+        lastFedAt: Date;
+        lastTickedAt: Date;
         createdAt: Date;
         updatedAt: Date;
     }>;

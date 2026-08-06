@@ -13,20 +13,23 @@ export declare class QuestService {
     constructor(prisma: PrismaService);
     getGlobalLeaderboard(): Promise<({
         user: {
-            id: string;
             name: string | null;
+            id: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
         };
     } & {
-        level: number;
+        name: string;
         id: string;
         userId: string;
-        name: string;
         species: string;
         personality: string;
+        role: string;
+        group: string;
+        description: string;
         evolutionLvl: number;
+        level: number;
         xp: number;
         mood: string;
         energy: number;
@@ -37,6 +40,8 @@ export declare class QuestService {
         intelligence: number;
         luck: number;
         friendship: number;
+        lastFedAt: Date;
+        lastTickedAt: Date;
         createdAt: Date;
         updatedAt: Date;
     })[]>;
