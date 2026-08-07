@@ -11,10 +11,12 @@ import { R2Service } from './r2/r2.service';
 import { InventoryService } from './inventory/inventory.service';
 import { QuestService } from './quest/quest.service';
 import { CompanionController } from './companion/companion.controller';
+import { CardRendererService } from 'renderer';
+import { StatsController } from './stats/stats.controller';
 
 @Module({
   imports: [PrismaModule, WebhookModule],
-  controllers: [CompanionController],
+  controllers: [CompanionController, StatsController],
   providers: [
     BetterAuthConfig,
     LockService,
@@ -25,6 +27,7 @@ import { CompanionController } from './companion/companion.controller';
     R2Service,
     InventoryService,
     QuestService,
+    CardRendererService,
   ],
   exports: [
     BetterAuthConfig,
@@ -36,6 +39,7 @@ import { CompanionController } from './companion/companion.controller';
     R2Service,
     InventoryService,
     QuestService,
+    CardRendererService,
   ],
 })
 export class AppModule {}

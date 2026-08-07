@@ -188,8 +188,32 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [latestCards, setLatestCards] = useState<CardData[]>([]);
   const [topCompanions, setTopCompanions] = useState<TopCompanionData[]>([]);
-  // const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number>(86400);
+  const [forestStats, setForestStats] = useState<{
+    total: number;
+    hatched: number;
+    adventures: number;
+    deaths: number;
+    famished: number;
+  } | null>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/stats/forest`);
+        if (res.ok) {
+          const data = await res.json();
+          setForestStats(data);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch forest stats", err);
+      }
+    };
+    fetchStats();
+    const interval = setInterval(fetchStats, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -230,11 +254,11 @@ export default function Home() {
     return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // const handleCopyCA = () => {
-  //   navigator.clipboard.writeText("Coming Soon");
-  //   setCopied(true);
-  //   setTimeout(() => setCopied(false), 2000);
-  // };
+  const handleCopyCA = () => {
+    navigator.clipboard.writeText("0xfab6fcc99db2a1c64fb28c70c54bc9ce661db175");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const fetchCompanionData = useCallback(async (targetEmail: string) => {
     // Try to load cached data first for instant loading
@@ -434,12 +458,12 @@ export default function Home() {
               <span className="live-dot"></span> Live on 𝕏 · systems normal
             </span>
             <span className="text-black/20 font-mono text-xs">•</span>
-            {/* <button 
+            <button 
               onClick={handleCopyCA}
               className="group flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-[#4C6B00] bg-[#4C6B00]/8 border border-[#4C6B00]/25 px-2.5 py-0.5 rounded-full transition-all duration-200 hover:bg-[#4C6B00]/15 hover:border-[#4C6B00]/40 focus:outline-none"
               title="Click to copy CA"
             >
-              <span>CA: {copied ? "Copied!" : "Coming Soon"}</span>
+              <span>CA: {copied ? "Copied!" : "0xfab6fcc99db2a1c64fb28c70c54bc9ce661db175"}</span>
               {copied ? (
                 <svg className="w-3 h-3 text-[#4C6B00]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -450,7 +474,7 @@ export default function Home() {
                   <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                 </svg>
               )}
-            </button> */}
+            </button>
           </div>
           <h1 className="font-display font-bold text-5xl lg:text-6xl leading-[1.02] tracking-tight mb-5 text-black">
             Your companion,<br />
@@ -699,6 +723,40 @@ export default function Home() {
             )}
           </div>
         </div>
+
+        {/* Forest Stats Highlight Card */}
+        {forestStats && (
+          <div className="col-span-1 md:col-span-2 bg-[#0E100A] border border-[#CCFF00]/30 rounded-2xl p-6 shadow-[0_0_24px_rgba(204,255,0,0.12)] border-glow mt-8 w-full">
+            <h3 className="font-display font-black text-xs uppercase tracking-wider text-[#CCFF00] mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#CCFF00] rounded-full animate-ping"></span>
+              🌲 Sherwood Forest Active Stats
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between shadow-sm transition-all hover:scale-[1.02] hover:border-white/20">
+                <span className="font-mono text-[9px] text-white/50 uppercase tracking-wider">Forest Population</span>
+                <span className="font-mono text-2xl font-bold text-white mt-2">{forestStats.total}</span>
+              </div>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between shadow-sm transition-all hover:scale-[1.02] hover:border-white/20">
+                <span className="font-mono text-[9px] text-white/50 uppercase tracking-wider">Hatched Today</span>
+                <span className="font-mono text-2xl font-bold text-white mt-2">{forestStats.hatched}</span>
+              </div>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between shadow-sm transition-all hover:scale-[1.02] hover:border-white/20">
+                <span className="font-mono text-[9px] text-white/50 uppercase tracking-wider">Adventures Today</span>
+                <span className="font-mono text-2xl font-bold text-white mt-2">{forestStats.adventures}</span>
+              </div>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between shadow-sm transition-all hover:scale-[1.02] hover:border-white/20">
+                <span className="font-mono text-[9px] text-white/50 uppercase tracking-wider">Lost Today</span>
+                <span className="font-mono text-2xl font-bold text-white mt-2">{forestStats.deaths}</span>
+              </div>
+              <div className="col-span-2 md:col-span-1 bg-[#CCFF00] border border-[#CCFF00]/50 rounded-xl p-4 flex flex-col justify-between shadow-[0_0_15px_rgba(204,255,0,0.3)] animate-pulse transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(204,255,0,0.5)]">
+                <span className="font-mono text-[9px] text-[#4C6B00] uppercase tracking-wider font-extrabold flex items-center gap-1">
+                  <span>⚠️</span> Famished Right Now
+                </span>
+                <span className="font-mono text-3xl font-black text-black mt-2">{forestStats.famished}</span>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* CAPABILITIES */}

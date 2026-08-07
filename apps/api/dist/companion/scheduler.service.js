@@ -13,18 +13,26 @@ exports.SchedulerService = void 0;
 const common_1 = require("@nestjs/common");
 const database_1 = require("database");
 const decay_util_1 = require("./decay.util");
+const twitter_service_1 = require("../webhook/twitter.service");
 let SchedulerService = class SchedulerService {
-    constructor(prisma) {
+    constructor(prisma, twitterService) {
         this.prisma = prisma;
+        this.twitterService = twitterService;
         this.intervalId = null;
+        this.famineIntervalId = null;
     }
     onModuleInit() {
         console.log('[SchedulerService] Initializing automated background decay checks...');
         this.intervalId = setInterval(() => this.tickAllCompanions(), 10000);
+        this.famineIntervalId = setInterval(() => this.notifyFamished(), 3600000);
+        setTimeout(() => this.notifyFamished(), 5000);
     }
     onModuleDestroy() {
         if (this.intervalId) {
             clearInterval(this.intervalId);
+        }
+        if (this.famineIntervalId) {
+            clearInterval(this.famineIntervalId);
         }
     }
     async tickAllCompanions() {
@@ -46,10 +54,52 @@ let SchedulerService = class SchedulerService {
             console.error('[SchedulerService] Error ticking companions:', error);
         }
     }
+    async notifyFamished() {
+        try {
+            const cutoff = new Date(Date.now() - 24 * 3600_000);
+            const atRisk = await this.prisma.companion.findMany({
+                where: {
+                    hunger: { gte: 100 },
+                    health: { gt: 0 },
+                    OR: [
+                        { famishedNotifiedAt: null },
+                        { famishedNotifiedAt: { lt: cutoff } }
+                    ]
+                },
+                include: { user: true },
+                take: 50
+            });
+            if (atRisk.length === 0) {
+                return;
+            }
+            console.log(`[SchedulerService] Found ${atRisk.length} famished companion(s) to notify.`);
+            for (const c of atRisk) {
+                const hoursLeft = Math.ceil(c.health / 10);
+                const handle = c.user.name || 'adventurer';
+                const species = c.species || 'companion';
+                const tweetText = `@${handle} your ${species} is famished.\n\nHealth is dropping 10 an hour. ${hoursLeft} hours before the Ledger records it.\n\nFeed it.`;
+                try {
+                    await this.twitterService.postTweet(tweetText);
+                    await this.prisma.companion.update({
+                        where: { id: c.id },
+                        data: { famishedNotifiedAt: new Date() }
+                    });
+                    console.log(`[SchedulerService] Dispatched famine warning tweet for companion ${c.name} (@${handle})`);
+                }
+                catch (tweetErr) {
+                    console.error(`[SchedulerService] Failed to send famine alert for ${c.name}:`, tweetErr);
+                }
+            }
+        }
+        catch (error) {
+            console.error('[SchedulerService] Error in notifyFamished task:', error);
+        }
+    }
 };
 exports.SchedulerService = SchedulerService;
 exports.SchedulerService = SchedulerService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [database_1.PrismaService])
+    __metadata("design:paramtypes", [database_1.PrismaService,
+        twitter_service_1.TwitterService])
 ], SchedulerService);
 //# sourceMappingURL=scheduler.service.js.map

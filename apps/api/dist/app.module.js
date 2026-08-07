@@ -20,13 +20,15 @@ const r2_service_1 = require("./r2/r2.service");
 const inventory_service_1 = require("./inventory/inventory.service");
 const quest_service_1 = require("./quest/quest.service");
 const companion_controller_1 = require("./companion/companion.controller");
+const renderer_1 = require("renderer");
+const stats_controller_1 = require("./stats/stats.controller");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [database_1.PrismaModule, webhook_module_1.WebhookModule],
-        controllers: [companion_controller_1.CompanionController],
+        controllers: [companion_controller_1.CompanionController, stats_controller_1.StatsController],
         providers: [
             auth_config_1.BetterAuthConfig,
             lock_service_1.LockService,
@@ -37,6 +39,7 @@ exports.AppModule = AppModule = __decorate([
             r2_service_1.R2Service,
             inventory_service_1.InventoryService,
             quest_service_1.QuestService,
+            renderer_1.CardRendererService,
         ],
         exports: [
             auth_config_1.BetterAuthConfig,
@@ -48,6 +51,7 @@ exports.AppModule = AppModule = __decorate([
             r2_service_1.R2Service,
             inventory_service_1.InventoryService,
             quest_service_1.QuestService,
+            renderer_1.CardRendererService,
         ],
     })
 ], AppModule);

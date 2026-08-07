@@ -47,6 +47,21 @@ let TwitterService = TwitterService_1 = class TwitterService {
             throw error;
         }
     }
+    async postTweet(text) {
+        if (!this.client) {
+            this.logger.log(`[MOCK] Posting tweet: "${text}"`);
+            return { mock: true };
+        }
+        try {
+            this.logger.log(`Posting new tweet: "${text}"`);
+            const response = await this.client.v2.tweet(text);
+            return response.data;
+        }
+        catch (error) {
+            this.logger.error(`Failed to post tweet:`, error);
+            throw error;
+        }
+    }
 };
 exports.TwitterService = TwitterService;
 exports.TwitterService = TwitterService = TwitterService_1 = __decorate([

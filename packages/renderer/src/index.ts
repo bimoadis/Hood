@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { createCanvas, loadImage } from 'canvas';
 import * as fs from 'fs';
 import * as path from 'path';
+import { renderAnimatedCard } from './animated';
+
+export { renderAnimatedCard };
 
 @Injectable()
 export class CardRendererService {
@@ -98,4 +101,17 @@ export class CardRendererService {
     }
     return canvas.toBuffer('image/png');
   }
+
+  async compileAnimatedCard(
+    name: string,
+    species: string,
+    evolution: number,
+    weapon?: string,
+    health?: number,
+    energy?: number,
+    hunger?: number
+  ): Promise<Buffer> {
+    return renderAnimatedCard(name, species, evolution, weapon, health, energy, hunger);
+  }
 }
+

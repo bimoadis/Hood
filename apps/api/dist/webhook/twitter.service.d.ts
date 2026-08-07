@@ -3,4 +3,5 @@ export declare class TwitterService {
     private client;
     constructor();
     replyToTweet(text: string, inReplyToTweetId: string): Promise<any>;
+    postTweet(text: string): Promise<any>;
 }

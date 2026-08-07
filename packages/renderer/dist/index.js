@@ -38,11 +38,13 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CardRendererService = void 0;
+exports.CardRendererService = exports.renderAnimatedCard = void 0;
 const common_1 = require("@nestjs/common");
 const canvas_1 = require("canvas");
 const fs = require("fs");
 const path = require("path");
+const animated_1 = require("./animated");
+Object.defineProperty(exports, "renderAnimatedCard", { enumerable: true, get: function () { return animated_1.renderAnimatedCard; } });
 let CardRendererService = (() => {
     let _classDecorators = [(0, common_1.Injectable)()];
     let _classDescriptor;
@@ -129,6 +131,9 @@ let CardRendererService = (() => {
                 console.warn('WebP conversion not supported on this platform, falling back to PNG');
             }
             return canvas.toBuffer('image/png');
+        }
+        async compileAnimatedCard(name, species, evolution, weapon, health, energy, hunger) {
+            return (0, animated_1.renderAnimatedCard)(name, species, evolution, weapon, health, energy, hunger);
         }
     };
     __setFunctionName(_classThis, "CardRendererService");

@@ -63,6 +63,7 @@ model Companion {
   
   lastFedAt    DateTime          @default(now())
   lastTickedAt DateTime          @default(now())
+  famishedNotifiedAt DateTime?
 
   memories     CompanionMemory[]
   inventory    Inventory[]
