@@ -11,7 +11,7 @@ Hoodieworld is a forest virtual pet platform running on Robinhood Chain and deep
 - **🥚 Autonomous Hatching & Training**: Interact with the platform on 𝕏 to hatch a companion and raise its stats (Friendship, Strength, Intelligence, Luck, etc.).
 - **🎨 Hand-Rendered Composite Cards**: Dynamically generates visual companion cards with clean rounded corners and reactive border glows.
 - **🐦 𝕏 (Twitter) Integration**: Completely native experience where the companion system listens to tweets, interprets natural language actions, and replies directly on-thread.
-- **🎁 $HOLK Airdrop Countdown**: An active 3-hour countdown displaying the top-3 pets leaderboard reward distribution of `10,000 $HOLK`.
+- **🎁 $HXYZ Airdrop Countdown**: An active 3-hour countdown displaying the top-3 pets leaderboard reward distribution of `10,000 $HXYZ`.
 - **🛠️ Monorepo Architecture**: Clean separation of packages and apps built using TypeScript, NestJS, Next.js, and Prisma.
 
 ---
