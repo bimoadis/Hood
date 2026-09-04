@@ -114,7 +114,7 @@ let CardRendererService = (() => {
             ctx.fillStyle = '#111827';
             ctx.font = 'bold 36px monospace';
             ctx.textAlign = 'left';
-            ctx.fillText(`HOODFOLK OUTLAW REGISTRY`, 80, 100);
+            ctx.fillText(`HOODIEWORLD OUTLAW REGISTRY`, 80, 100);
             ctx.fillStyle = '#4B5563';
             ctx.font = '24px monospace';
             ctx.fillText(`Species: ${species}`, 80, 480);

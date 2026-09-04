@@ -481,7 +481,7 @@ export default function Home() {
             <span className="text-[#4C6B00]">running on Robinhood Chain.</span>
           </h1>
           <p className="text-black/60 text-lg max-w-md mb-8 leading-relaxed">
-            Hoodfolk is the forest virtual pet platform on X — hatch a companion in Sherwood forest today, and train it to be a legendary Robin Hood protector using custom Pixel Art composites.
+            Hoodieworld is the forest virtual pet platform on X — hatch a companion in Sherwood forest today, and train it to be a legendary Robin Hood protector using custom Pixel Art composites.
           </p>
           <div className="flex flex-wrap gap-4 mb-10">
             <button
@@ -770,7 +770,7 @@ export default function Home() {
           <div className="bg-white border border-black/10 rounded-xl p-5 border-glow">
             <div className="font-mono text-[#4C6B00] text-lg mb-2">◆</div>
             <div className="font-display font-bold mb-1 text-black">One exclusive companion</div>
-            <p className="text-black/60 text-sm leading-relaxed">Each 𝕏 account gets exactly one Hoodling. Keeps every bond personal.</p>
+            <p className="text-black/60 text-sm leading-relaxed">Each 𝕏 account gets exactly one Hoodieworld. Keeps every bond personal.</p>
           </div>
           <div className="bg-white border border-black/10 rounded-xl p-5 border-glow">
             <div className="font-mono text-[#4C6B00] text-lg mb-2">▲</div>

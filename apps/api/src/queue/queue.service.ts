@@ -263,7 +263,7 @@ export class QueueService {
         }
         
         // Append companion promo tagline
-        aiResponse += `\n\n🏹 Your companion awaits. Hatch, train, and level up at hoodfolk.tech`;
+        aiResponse += `\n\n🏹 Your companion awaits. Hatch, train, and level up at hoodieworld.tech`;
 
         // Save AI Response to CompanionMemory
         await this.prisma.companionMemory.create({
@@ -280,7 +280,7 @@ export class QueueService {
         const replyTweetId = item.event.id_str;
         if (replyTweetId && replyTweetId !== 'test_companion') {
           try {
-            const replyText = `🏹 Your companion awaits. Hatch, train, and level up at hoodfolk.tech`;
+            const replyText = `🏹 Your companion awaits. Hatch, train, and level up at hoodieworld.tech`;
             await this.twitterService.replyToTweet(replyText, replyTweetId);
           } catch (err) {
             console.error(`[QueueService] Error posting tweet reply back to Twitter:`, err);

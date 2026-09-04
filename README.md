@@ -1,6 +1,6 @@
-# 🌲 Hoodfolk
+# 🌲 Hoodieworld
 
-Hoodfolk is a forest virtual pet platform running on Robinhood Chain and deeply integrated with 𝕏. Hatch a companion in Sherwood forest today, train it to become a legendary Robin Hood protector using custom Pixel Art composites, and raise it in public via autonomous interactive encounters on 𝕏.
+Hoodieworld is a forest virtual pet platform running on Robinhood Chain and deeply integrated with 𝕏. Hatch a companion in Sherwood forest today, train it to become a legendary Robin Hood protector using custom Pixel Art composites, and raise it in public via autonomous interactive encounters on 𝕏.
 
 **Contract Address (CA):** `0xfab6fcc99db2a1c64fb28c70c54bc9ce661db175`
 

@@ -241,7 +241,7 @@ let QueueService = class QueueService {
                 else {
                     aiResponse = `Hello ${xScreenName}! I'm ready for our next adventure!`;
                 }
-                aiResponse += `\n\n🏹 Your companion awaits. Hatch, train, and level up at hoodfolk.tech`;
+                aiResponse += `\n\n🏹 Your companion awaits. Hatch, train, and level up at hoodieworld.tech`;
                 await this.prisma.companionMemory.create({
                     data: {
                         companionId: updatedCompanion.id,
@@ -253,7 +253,7 @@ let QueueService = class QueueService {
                 const replyTweetId = item.event.id_str;
                 if (replyTweetId && replyTweetId !== 'test_companion') {
                     try {
-                        const replyText = `🏹 Your companion awaits. Hatch, train, and level up at hoodfolk.tech`;
+                        const replyText = `🏹 Your companion awaits. Hatch, train, and level up at hoodieworld.tech`;
                         await this.twitterService.replyToTweet(replyText, replyTweetId);
                     }
                     catch (err) {

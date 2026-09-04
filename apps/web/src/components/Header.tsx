@@ -64,11 +64,11 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-3">
             <img
               src="/logo.png"
-              alt="Hoodfolk Logo"
+              alt="Hoodieworld Logo"
               className="w-7 h-7 rounded-lg object-cover"
             />
             <span className="font-display font-bold text-xl tracking-tight text-black">
-              Hoodfolk<span className="text-[#4C6B00]">.</span>
+              Hoodieworld<span className="text-[#4C6B00]">.</span>
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-black/50">
@@ -126,7 +126,7 @@ export default function Header() {
                 <div className="text-5xl animate-pulse">🐣</div>
                 <h3 className="font-display font-extrabold text-2xl text-black">Step 1: Go to 𝕏</h3>
                 <p className="text-black/60 text-sm leading-relaxed max-w-xs">
-                  Click continue at the end of this guide to open our official Twitter profile <span className="font-bold text-[#4C6B00]">@HoodFolkTech</span>.
+                  Click continue at the end of this guide to open our official Twitter profile <span className="font-bold text-[#4C6B00]">@Hoodieworld</span>.
                 </p>
               </div>
             )}
@@ -136,7 +136,7 @@ export default function Header() {
                 <div className="text-5xl">⚡</div>
                 <h3 className="font-display font-extrabold text-2xl text-black">Step 2: Crack Your Egg</h3>
                 <p className="text-black/60 text-sm leading-relaxed max-w-xs">
-                  Every time you tag <span className="font-bold text-[#4C6B00]">@hoodfolktech</span> on X, your egg cracks and your Hoodling starts growing!
+                  Every time you tag <span className="font-bold text-[#4C6B00]">@hoodieworld</span> on X, your egg cracks and your Hoodieworld starts growing!
                 </p>
               </div>
             )}
@@ -146,7 +146,7 @@ export default function Header() {
                 <div className="text-5xl">🍎</div>
                 <h3 className="font-display font-extrabold text-2xl text-black">Step 3: Feed & Care</h3>
                 <p className="text-black/60 text-sm leading-relaxed max-w-xs">
-                  Feed or train your Hoodling on X using natural language! Try replying with: <br />
+                  Feed or train your Hoodieworld on X using natural language! Try replying with: <br />
                   <span className="font-mono text-xs bg-black/5 px-2 py-1 rounded text-neutral-800 inline-block mt-2">
                     &quot;Feed my pet a strawberry&quot;
                   </span>
@@ -226,7 +226,7 @@ export default function Header() {
                   </>
                 ) : (
                   <a
-                    href="https://x.com/HoodFolkTech"
+                    href="https://x.com/Hoodieworld"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setShowOnboarding(false)}

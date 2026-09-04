@@ -36,7 +36,7 @@ export async function renderAnimatedCard(
   bgCtx.fillStyle = '#111827';
   bgCtx.font = 'bold 36px monospace';
   bgCtx.textAlign = 'left';
-  bgCtx.fillText(`HOODFOLK OUTLAW REGISTRY`, 80, 100);
+  bgCtx.fillText(`HOODIEWORLD OUTLAW REGISTRY`, 80, 100);
 
   bgCtx.fillStyle = '#4B5563';
   bgCtx.font = '24px monospace';

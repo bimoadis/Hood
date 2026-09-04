@@ -150,7 +150,7 @@ export default function Docs() {
           <span className="font-mono text-xs text-black/40">001 / OVERVIEW</span>
           <h2 className="font-display font-bold text-2xl mt-2 mb-3 text-black">The desk.</h2>
           <p className="text-black/70 max-w-2xl mb-4">
-            <strong>Hoodfolk</strong> is a platform launched on Robinhood Chain for raising AI-driven digital companions directly through 𝕏 (Twitter) — a living Pixel Art creature that grows, develops personality, and forms bonds with other companions across the network, entirely through ordinary conversation.
+            <strong>Hoodieworld</strong> is a platform launched on Robinhood Chain for raising AI-driven digital companions directly through 𝕏 (Twitter) — a living Pixel Art creature that grows, develops personality, and forms bonds with other companions across the network, entirely through ordinary conversation.
           </p>
           <p className="text-black/70 max-w-2xl">
             Tag the desk in any post and the autonomous agent takes over: reads your words, crafts a visual response card, and orchestrates encounters between your companion and others. No downloads, no accounts, no friction.
@@ -188,7 +188,7 @@ export default function Docs() {
               <div className="font-mono text-xs text-black/40 mb-2">01</div>
               <div className="font-display font-bold mb-2 text-black">Summon a creature</div>
               <div className="font-mono text-xs text-black/60 bg-[#F2F2EC] rounded-lg p-3 mb-2">
-                &quot;hatch my hoodling&quot; · &quot;create a companion&quot; · &quot;I need a pet&quot;
+                &quot;hatch my hoodieworld&quot; · &quot;create a companion&quot; · &quot;I need a pet&quot;
               </div>
               <p className="text-black/60 text-sm">The system assigns a unique Pixel Art creature with an AI-crafted name, species, and RPG role.</p>
             </div>
@@ -237,7 +237,7 @@ export default function Docs() {
               <tbody className="text-black/70">
                 <tr className="border-b border-black/10">
                   <td className="py-3 pr-4 font-semibold text-black">summon</td>
-                  <td className="py-3 pr-4">&quot;hatch my hoodling&quot;</td>
+                  <td className="py-3 pr-4">&quot;hatch my hoodieworld&quot;</td>
                   <td className="py-3 pr-4">1 per account</td>
                   <td className="py-3">Welcome card</td>
                 </tr>
@@ -279,7 +279,7 @@ export default function Docs() {
             <pre className="p-5 font-mono text-xs leading-relaxed overflow-x-auto text-[#CCFF00]">
               <span className="text-white/40">$</span> <span className="text-white">&quot;serve her hot chocolate&quot;</span><br />
               <span className="text-[#CCFF00]">▲ wrapping tiny paws around the mug, purring softly!</span><br /><br />
-              <span className="text-white/40">$</span> <span className="text-white">&quot;give my hoodling asteroid fragments&quot;</span><br />
+              <span className="text-white/40">$</span> <span className="text-white">&quot;give my hoodieworld asteroid fragments&quot;</span><br />
               <span className="text-[#CCFF00]">▲ crunching cosmic debris, sparkling from within!</span>
             </pre>
           </div>

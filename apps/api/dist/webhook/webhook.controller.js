@@ -90,7 +90,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], WebhookController.prototype, "handleIncomingEvents", null);
 exports.WebhookController = WebhookController = __decorate([
-    (0, common_1.Controller)('api/webhooks/x'),
+    (0, common_1.Controller)(['api/webhooks/x', 'api/webhooks/x2']),
     __metadata("design:paramtypes", [webhook_service_1.WebhookService,
         lock_service_1.LockService,
         queue_service_1.QueueService])

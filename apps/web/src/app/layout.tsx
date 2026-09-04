@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Hoodfolk — Your pixel companion, running on Robinhood Chain",
+  title: "Hoodieworld — Your pixel companion, running on Robinhood Chain",
   description: "An immersive virtual pet and RPG simulation set in the medieval Robin Hood universe, launched on Robinhood Chain, raised in public on X.",
 };
 
@@ -39,13 +39,13 @@ export default function RootLayout({
         {/* Ticker marquee header */}
         <div className="ticker-wrap">
           <div className="ticker">
-            <span>HOODFOLK DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
+            <span>HOODIEWORLD DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
             <span>CHAIN <span className="tk-up">▲ ROBINHOOD</span></span>
             <span>LAUNCH <span className="tk-up">▲ ROBINHOOD</span></span>
             <span>MINT PRICE <span className="tk-up">▲ $0.00</span></span>
             <span>FEED COOLDOWN <span className="tk-down">▼ 60:00</span></span>
             <span>NETWORK <span className="tk-up">▲ 𝕏 · LIVE</span></span>
-            <span>HOODFOLK DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
+            <span>HOODIEWORLD DESK <span className="tk-up">▲ SYSTEMS NORMAL</span></span>
             <span>CHAIN <span className="tk-up">▲ ROBINHOOD</span></span>
             <span>LAUNCH <span className="tk-up">▲ ROBINHOOD</span></span>
             <span>FEED COOLDOWN <span className="tk-down">▼ 60:00</span></span>
@@ -61,7 +61,7 @@ export default function RootLayout({
         {/* Footer */}
         <footer className="border-t border-black/10 mt-auto bg-[#FAFAF7]">
           <div className="max-w-6xl mx-auto px-6 py-10 font-mono text-[11px] text-black/40 flex flex-wrap justify-between gap-4">
-            <div>© 2026 Hoodfolk · a trading terminal for tiny lives</div>
+            <div>© 2026 Hoodieworld · a trading terminal for tiny lives</div>
             <div className="flex items-center gap-2">
               <span className="live-dot"></span>
               <span>Systems <span className="text-[#4C6B00]">▲ Normal</span></span>
